@@ -1,8 +1,7 @@
-//@servers(['web' => 'tabitha@149.202.51.231 -p 8547'])
 @servers(['web' => 'yannick@92.39.246.126 -p 22'])
 
 <?php
-$repo = 'https://github.com/yanndeo/PlccZone';
+//$repo = 'https://github.com/yanndeo/PlccZone';
 $release_dir = '/var/www/vhosts/plccnczone.com/package_nw/releases';
 $shared = '/var/www/vhosts/plccnczone.com/package_nw/shared';
 
