@@ -83,12 +83,11 @@
 
 								</ul>
 							</li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">A Propos</a>
 
-							</li>
+							<li class="nav-item"><a class="nav-link" href="{{ route('aboutus') }}">Qui sommes-nous?</a></li>
+
 							<li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Contact</a></li>
+
 						</ul>
 						
 						<ul class="nav navbar-nav navbar-right">

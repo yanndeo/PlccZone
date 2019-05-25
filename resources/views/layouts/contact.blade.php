@@ -16,9 +16,9 @@
         <div class="container">
             <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
                 <div class="col-first">
-                    <h1>Comment nous contacter ?</h1>
+                    <h1>Nous contacter ?</h1>
                     <nav class="d-flex align-items-center">
-                        <a href="category.html">Contact</a>
+                        <a href="#">Contact</a>
                     </nav>
                 </div>
             </div>

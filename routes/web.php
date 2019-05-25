@@ -49,3 +49,7 @@ Route::get('/contact', function () {
 })->name('contact');
 
 
+
+Route::get('/apropos', function () {
+    return view('layouts/aboutus');
+})->name('aboutus');
