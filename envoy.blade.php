@@ -1,5 +1,5 @@
 //@servers(['web' => 'tabitha@149.202.51.231 -p 8547'])
-@servers(['web' => 'yannick@plccnczone.com -p 22'])
+@servers(['web' => 'yannick@92.39.246.126 -p 22'])
 
 <?php
 $repo = 'https://github.com/yanndeo/PlccZone';

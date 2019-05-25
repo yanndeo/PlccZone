@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Repositories\BrandRepository;
 use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -10,14 +11,16 @@ class HomeController extends Controller
 {
     private $categoryRepository;
 
+    private  $brandRepository;
+
     /**
      * HomeController constructor.
      * @param CategoryRepository $categoryRepository
      */
-
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(CategoryRepository $categoryRepository, BrandRepository $brandRepository)
     {
         $this->categoryRepository = $categoryRepository;
+        $this->brandRepository = $brandRepository;
 
     }
 
@@ -25,7 +28,6 @@ class HomeController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-
     public function index()
     {
         $categories = $this->categoryRepository->limitCategory(8);
@@ -36,6 +38,17 @@ class HomeController extends Controller
 
     //SubMenu Category function
 
+    public function subMenu()
+    {
+
+        $menu_categories = $this->categoryRepository->limitCategory(5);
+
+        $menu_brands = $this->brandRepository->limitBrand(5);
+
+        return view('base/app', compact('menu_categories'));
+
+
+    }
 
 
 

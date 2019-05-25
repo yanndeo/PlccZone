@@ -9,13 +9,20 @@ use Illuminate\Database\Query\Builder;
 
 class CategoryRepository implements CategoryInterface
 {
+
+
+
     private $category;
+
+
 
     public function __construct(Category $category )
     {
         $this->category = $category;
 
     }
+
+
 
     /**
      * @return mixed
@@ -26,6 +33,8 @@ class CategoryRepository implements CategoryInterface
         return $this->queryBuilderCategory()->get();
 
     }
+
+
 
 
     public function limitCategory($limit)
@@ -39,6 +48,7 @@ class CategoryRepository implements CategoryInterface
     {
         return $this->queryBuilderCategory()->paginate($hit);
     }
+
 
 
     public function listWithBrand()

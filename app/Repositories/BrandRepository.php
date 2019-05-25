@@ -36,6 +36,17 @@ class BrandRepository implements BrandInterface
         return $this->queryBuilderBrand()->paginate($hit);
     }
 
+
+
+    public function limitBrand($limit)
+    {
+        return $this->queryBuilderBrand()->limit($limit)->get();
+    }
+
+
+
+
+
     /**
      * @param array $data
      * @return mixed
@@ -44,6 +55,9 @@ class BrandRepository implements BrandInterface
     {
         // TODO: Implement storedBrand() method.
     }
+
+
+
 
     /**
      * @param array $data
@@ -79,7 +93,7 @@ class BrandRepository implements BrandInterface
 
     public function queryBuilderBrand()
     {
-        return $this->brand->select('id','name','comment','avatar');
+        return $this->brand->select('id','name','comment','avatar')->orderBy('name', 'desc');
     }
 
 

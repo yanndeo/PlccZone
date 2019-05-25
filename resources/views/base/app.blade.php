@@ -64,9 +64,7 @@
 								 aria-expanded="false">Categorie</a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" href="category.html">Shop Category</a></li>
-									<li class="nav-item"><a class="nav-link" href="single-product.html">Product Details</a></li>
-									<li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
-									<li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
+
 									<li class="nav-item" style="background-color: #ffba00 ; "  ><a class="nav-link" href="{{route('category')}}" style="color: whitesmoke">VOIR PLUS</a></li>
 								</ul>
 							</li>
