@@ -32,6 +32,7 @@ class HomeController extends Controller
     {
         $categories = $this->categoryRepository->limitCategory(8);
 
+
         return view('layouts/home', compact('categories'));
     }
 
@@ -41,7 +42,9 @@ class HomeController extends Controller
     public function subMenu()
     {
 
-        $menu_categories = $this->categoryRepository->limitCategory(5);
+        $menu_categories = $this->categoryRepository->limitCategory(8);
+
+        dd($menu_categories);
 
         $menu_brands = $this->brandRepository->limitBrand(5);
 

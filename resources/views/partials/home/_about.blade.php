@@ -6,28 +6,9 @@
                     <h1>Exclusive Hot Deal Ends Soon!</h1>
                     <p>Who are in extremely love with eco friendly system.</p>
                 </div>
-                <div class="col-lg-12">
-                    <div class="row clock-wrap">
-                        <div class="col clockinner1 clockinner">
-                            <h1 class="days">150</h1>
-                            <span class="smalltext">Days</span>
-                        </div>
-                        <div class="col clockinner clockinner1">
-                            <h1 class="hours">23</h1>
-                            <span class="smalltext">Hours</span>
-                        </div>
-                        <div class="col clockinner clockinner1">
-                            <h1 class="minutes">47</h1>
-                            <span class="smalltext">Mins</span>
-                        </div>
-                        <div class="col clockinner clockinner1">
-                            <h1 class="seconds">59</h1>
-                            <span class="smalltext">Secs</span>
-                        </div>
-                    </div>
-                </div>
+
             </div>
-            <a href="" class="primary-btn">Shop Now</a>
+            <a href="{{ route('articles') }}" class="primary-btn">Tous Nos Articles</a>
         </div>
         <div class="col-lg-6 no-padding exclusive-right">
             <div class="active-exclusive-product-slider">

@@ -52,6 +52,8 @@ class Category extends Model
     }
 
 
+
+
     public function setBrandsListAttribute($value)
     {
         return $this->tags()->sync($value);

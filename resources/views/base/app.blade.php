@@ -20,7 +20,7 @@
 @show
 	<title>
 
-		@section('title')  @show | PlccZone
+		@section('title')  @show | PlccnZone
 	</title>
 
 	<link rel="stylesheet" href="{{asset('css/linearicons.css')}}">
@@ -63,24 +63,32 @@
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">Categorie</a>
 								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="category.html">Shop Category</a></li>
+									@foreach($menu_categorie as $category)
+										<li class="nav-item">
+											<a class="nav-link" href="{{ route('show_brands', ['slug'=>$category->slug, 'category'=>$category ]) }}">{{ $category->title }}</a>
+										</li>
+									@endforeach
 
-									<li class="nav-item" style="background-color: #ffba00 ; "  ><a class="nav-link" href="{{route('category')}}" style="color: whitesmoke">VOIR PLUS</a></li>
+									<li class="nav-item" style="background-color: #ffba00 ; "  ><a class="nav-link" href="{{route('category')}}" style="color: whitesmoke"> VOIR PLUS </a></li>
 								</ul>
 							</li>
 							<li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">Fabricant</a>
+
 								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-									<li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
-									<li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
-									<li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
-									<li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
-									<li class="nav-item" style="background-color: #ffba00 ; "><a class="nav-link" href="{{ route('brand') }}" style="color: whitesmoke">VOIR PLUS</a></li>
+
+									@foreach($menu_brand as $brand)
+									<li class="nav-item"><a class="nav-link" href="{{ route('show_categories', ['slug'=>$brand->slug, 'category'=>$brand ]) }}">{{ $brand->name }}</a></li>
+									@endforeach
+
+									<li class="nav-item" style="background-color: #ffba00 ; "><a class="nav-link" href="{{ route('brand') }}" style="color: whitesmoke"> VOIR PLUS </a></li>
 
 								</ul>
 							</li>
+
+							<li class="nav-item"><a class="nav-link" href="{{ route('articles') }}">Nos Articles </a></li>
+
 
 							<li class="nav-item"><a class="nav-link" href="{{ route('aboutus') }}">Qui sommes-nous?</a></li>
 
@@ -100,9 +108,10 @@
 			</nav>
 		</div>
 
+
+
 		<div class="search_input" id="search_input_box">
 		</div>
-
 
 	</header>
 	<!-- End Header Area -->

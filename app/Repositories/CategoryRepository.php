@@ -97,7 +97,7 @@ class CategoryRepository implements CategoryInterface
 
     public function queryBuilderCategory()
     {
-         return $this->category->select('id','title','description','avatar');
+         return $this->category->select('id','title','description','avatar', 'slug');
     }
 
 

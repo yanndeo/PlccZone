@@ -1,112 +1,105 @@
 @extends('base.app')
 
 
-
 @section('meta')
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+    <meta name="description" content="liste des fabricants de la categorie"  >
+    <meta name="keywords" content="liste ,fabricants , de la , categories, manufacure , maroc , leader ">
 @show
 
 @section('title')
-    Nos Categories
+    {{ $category->title }}
 @endsection
 
 @section('content')
 
-<div id="category">
 
 
-    <!-- End Header Area -->
 
-    <!-- Start Banner Area -->
-    <section class="banner-area organic-breadcrumb">
-        <div class="container">
-            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-                <div class="col-first">
-                    <h1> Trie Par Categorie . </h1>
-                    <nav class="d-flex align-items-center">
-                        <a href="{{route('home')}}">Accueil<span class="lnr lnr-arrow-right"></span></a>
-                        <a href="#">liste de categories</a>
-                    </nav>
+
+    <div id="">
+
+        <section class="banner-area organic-breadcrumb">
+            <div class="container">
+                <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                    <div class="col-first">
+                        <h1> {{$category->title }}.</h1>
+                        <nav class="d-flex align-items-center">
+                            <a href="#">Categorie<span class="lnr lnr-arrow-right"></span></a>
+
+                            <a href="#">/  Liste de fabricants</a>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- End Banner Area -->
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-3 col-lg-4 col-md-5">
-                <div class="sidebar-categories">
-                    <div class="head">Filtre par fabricants</div>
+        </section>
 
-                    <ul class="main-categories">
-                        @foreach($catSidebar as $cat)
-                        <li class="main-nav-list"><a data-toggle="collapse" href="#category{{$cat->id}}" aria-expanded="false" aria-controls="fruitsVegetable"><span
-                                        class="lnr lnr-arrow-right"></span>{{ $cat->title }}<span class="number"> ( {{ $cat->brands->count() }})</span></a>
-
-
-                            <ul class="collapse" id="category{{$cat->id}}" data-toggle="collapse" aria-expanded="false" aria-controls="category{{$cat->id}}">
-                                @foreach ($cat->brands as $brand)
-                                    <li class="main-nav-list child" ><a href="/fabricant/slug-id" style="color: blue">{{ $brand->name }} <span class="number">({{ $brand->products->count() }})</span></a></li>
-
-                                @endforeach
-                            </ul>
-                        </li>
-                        @endforeach
-
-
-                    </ul>
-
+        <!-- End Banner Area -->
+        <!--================Blog Categorie Area =================-->
+        <section class="blog_categorie_area">
+            <div class="container">
+                <div class="blog_details">
+                    <a href="#">
+                        <h2 class="text-center" style="text-align: justify"> @if($brands->count() > 0) Environ {{ $brands->count() }} fabricants différents @else Aucun fabricant rattaché , pour l'heure. @endif   <br/>
+                            associés</h2>
+                    </a>
+                    <p>
+                        {{ $category->description }}
+                    </p>
+                    <a href="#" class="white_bg_btn">Je voudrais un devis .. </a>
                 </div>
-            </div>
-            <div class="col-xl-9 col-lg-8 col-md-7">
-                <!-- Start Filter Bar -->
 
-                <!-- End Filter Bar -->
-                <!-- Start Best Seller -->
-                <section class="lattest-product-area pb-40 category-list">
-                    <div class="row">
+                <div class="row" style="margin-top: 70px">
 
-                    @foreach($categories as $category)
-                        <!-- single product -->
-                        <div class="col-lg-4 col-md-6">
-                            <div class="single-product">
-                                <img class="img-fluid" src="img/product/p6.jpg" alt="">
-                                <div class="product-details">
-                                    <h6> {{$category->title}}</h6>
-                                    <div class="prd-bottom">
+                @if($brands->count() > 0)
+                    @foreach ($brands as $brand)
 
-                                        <a href="/category/slug-id" class="social-info">
-                                            <span class="lnr lnr-move"></span>
-                                            <p class="hover-text">VOIR PRODUIT</p>
+                        <div class="col-lg-4" style="margin-bottom: 45px">
+                            <div class="categories_post">
+                                <img src="/img/blog/cat-post/cat-post-3.jpg" alt="post">
+                                <div class="categories_details">
+                                    <div class="categories_text">
+                                        <a href="/fabrican/slug-id">
+                                            <h5>{{ $brand->name }}</h5>
                                         </a>
+                                        <div class="border_line"></div>
+                                        <p></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    @endforeach
+
+                @endif
 
 
-                        @endforeach
-                    </div>
 
-                </section>
 
-            <!-- End Best Seller -->
-                <!-- Start Filter Bar -->
-                {{ $categories->links() }}
+                </div>
 
-                <!-- End Filter Bar -->
+
+                {{--paginataion--}}
+                <div class="text-center" style="margin-top: 74px">
+{{--
+                    {{ $brands->links() }}
+--}}
+
+                </div>
+
             </div>
-        </div>
+
+        </section>
+
+
+        <!--================Blog Categorie Area =================-->
+
+        <!-- Start related-product Area -->
+        <section style="margin-bottom: 100px">
+            <div class="container">
+
+            </div>
+        </section>
+
     </div>
 
-    <!-- Start related-product Area -->
-    <section style="margin-bottom: 100px">
-        <div class="container">
-
-        </div>
-    </section>
-
-</div>
-
 @endsection
+

@@ -30,8 +30,8 @@
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
                                 dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
                             <div class="add-bag d-flex align-items-center">
-                                <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                                <span class="add-text text-uppercase">Add to Bag</span>
+                                <a class="add-btn" href="{{ route('articles') }}"><span class="lnr lnr-cross"></span></a>
+                                <span class="add-text text-uppercase"> Nos Articles</span>
                             </div>
                         </div>
                     </div>

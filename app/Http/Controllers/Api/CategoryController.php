@@ -39,7 +39,7 @@ class CategoryController extends Controller
 
         $catSidebar = $this->categoryRepository->listWithBrand();  //Sidebar on page Category Page
 
-        return view('layouts/category', [
+        return view('layouts/categories', [
             'categories'=> $categories,
             'catSidebar'=>$catSidebar
         ]);
@@ -61,8 +61,18 @@ class CategoryController extends Controller
      */
     public function showBrands(String $slug , Category $category)
     {
+        //Check if slug has don't been modified
 
-        dd($category);
+        if ($category->slug !== $slug){
+
+            return abort(404);
+        }
+
+        //else that all is ok.
+        return view('layouts/category', [
+            'category'=> $category,
+            'brands'=>$category->brands_list
+        ]);
 
     }
 

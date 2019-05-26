@@ -6,7 +6,9 @@ $release_dir = '/var/www/vhosts/plccnczone.com/package_nw/releases';
 $shared = '/var/www/vhosts/plccnczone.com/package_nw/shared';
 
 $app_dir = '/var/www/vhosts/plccnczone.com/';
-$current= '/var/www/vhosts/plccnczone.com/httpdocs';
+$current = '/var/www/vhosts/plccnczone.com/httpdocs';
+$current_bis = '/var/www/vhosts/plccnczone.com';
+
 
 $release = 'release_' . date('YmdHis');
 $limiteless = 3;
@@ -38,6 +40,7 @@ mkdir -p {{ $shared }};
 
 @task('clean_old_releases')
     cd {{ $release_dir }};
+    #chmod -R 777 {{ $shared }}/storage
     echo "suppr. des vieilles releases";
     #chmod -R 777 {{ $shared }}/storage
     #chgrp -R www-data storage bootstrap/cache

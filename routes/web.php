@@ -18,10 +18,13 @@ Route::namespace('Api')->group(function () {
 
     Route::get('/categories', 'CategoryController@index')->name('category');
 
-    Route::get('category/{slug}-{id}', 'CategoryController@showBrands')->name('show_brands'); //ici
+    Route::get('/categorie/{slug}_{category}', 'CategoryController@showBrands')->name('show_brands'); //ici
 
 
     Route::get('/fabricants', 'BrandController@index')->name('brand');
+
+    Route::get('/fabricant/{slug}_{brand}', 'BrandController@showCategories')->name('show_categories');
+
 
     Route::get('/articles', 'ProductController@index')->name('articles');
 
