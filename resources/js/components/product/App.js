@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import axios from 'axios';
 import {API_END_POINT} from "../data/uri";
 //Components
 import DataTable from "./data-table";
@@ -31,13 +31,12 @@ import { _DATA_ARTICLES_INITIAL, _FAILURES_DATA_ARTICLES, _BRANDS , _CATEGORIES 
                  this.props.dispatch(_BRANDS(Response.data.brands)); 
                  this.props.dispatch(_CATEGORIES(Response.data.categories)); 
 
-
             })
             .catch((error)=>{
 
-                this.props.dispatch(_FAILURES_DATA_ARTICLES(error)); 
-
-                console.log("look-error",error.response.statusText, error.response.status );
+                console.log(error);
+                this.props.dispatch(_FAILURES_DATA_ARTICLES(error));
+               // console.log("look-error",error.response.statusText, error.response.status );
             });
     }
 

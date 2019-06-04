@@ -1,4 +1,4 @@
-@servers(['web' => 'yannick@92.39.246.126 -p 22'])
+@servers(['web' => 'yannick@92.39.246.126 -p 19878'])
 
 <?php
 $repo = 'https://github.com/yanndeo/PlccZone';
@@ -87,8 +87,9 @@ mkdir -p {{ $shared }};
     #chown -R yannick:psacln httpdocs/
     #chmod -R 777 httpdocs
     rm -rf {{ $current }}'/'* ;
-    echo " {{$current}} vider ";
+    echo " {{ $current }} vider ";
     ln -s {{ $release_dir }}/{{ $release }} {{ $current }};
+
 
     #chgrp -h www-data {{ $current}};
     echo "liens symb . recreer :env ,storage";
@@ -118,7 +119,7 @@ mkdir -p {{ $shared }};
     cd {{ $release_dir }}/{{ $release }};
 
     /opt/plesk/php/7.1/bin/php artisan cache:clear;
-    /opt/plesk/php/7.1/bin/php artisan migrate --env=production --force;
+    #/opt/plesk/php/7.1/bin/php artisan migrate --env=production --force;
     #php artisan db:seed;
 
     /opt/plesk/php/7.1/bin/php artisan config:clear;
@@ -127,6 +128,8 @@ mkdir -p {{ $shared }};
     /opt/plesk/php/7.1/bin/php artisan storage:link;
 
     /opt/plesk/php/7.1/bin/php artisan down;
+    /opt/plesk/php/7.1/bin/php artisan up;
+
     echo 'Run migrations';
 
 @endtask
@@ -134,7 +137,7 @@ mkdir -p {{ $shared }};
 @task('up')
     cd {{ $current }};
     npm install
-    npm run build
+    #npm run build
     npm cache clear --force
     /opt/plesk/php/7.1/bin/php artisan up;
     echo " finished";

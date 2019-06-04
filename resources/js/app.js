@@ -14,6 +14,6 @@ require('./bootstrap');
  */
 
 
-require('./components/product/index')
+require('./components/product/index');
 require('./components/search/index');
 
