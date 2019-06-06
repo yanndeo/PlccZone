@@ -16,4 +16,6 @@ require('./bootstrap');
 
 require('./components/product/index');
 require('./components/search/index');
+require('./components/forms/devis-form');
+
 

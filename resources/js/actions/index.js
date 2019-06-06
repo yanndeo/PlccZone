@@ -7,6 +7,10 @@ export const FAILURES_DATA = "FAILURES_DATA";
 export const BRAND_LIST = "BRAND_LIST";
 export const CATEGORY_LIST = "CATEGORY_LIST";
 
+//forms
+export const ASKED_DEVIS = "ASKED_DEVIS";
+
+import axios from 'axios'
 
 
 
@@ -64,6 +68,29 @@ export function _CATEGORIES(categories) {
         type: CATEGORY_LIST,
         value: categories
     };
+}
+
+
+
+
+
+
+
+
+
+export const _ASKED_DEVIS = async (data) => {
+
+    try {
+
+        console.log('to_action_asked', data)
+        
+       await axios.post('/')
+        
+    } catch (error) {
+        console.log('error_asked_edvis', error)
+    }
+
+
 }
 
 /**

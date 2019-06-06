@@ -9,16 +9,14 @@ import App from './App';
 
 const Index = () => {
     return (
-        <App />
+        <App/>
     );
 };
 
 if (document.getElementById("search_input_box")) {
 
     ReactDOM.render(
-        <Provider store={STORE}>
-            <Index />
-        </Provider>,
+            <Index/>,
         document.getElementById("search_input_box")
     );
 }

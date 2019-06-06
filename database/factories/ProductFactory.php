@@ -9,5 +9,11 @@ $factory->define(App\Models\Product::class, function (Faker $faker) {
         'name' => $faker->colorName,
         'reference' =>$faker->unique()->creditCardNumber(null,true,'-'),
         'description' => $faker->text(100),
+
+        'availability' =>$faker->boolean(),
+        'state'=> $faker->randomElement(['neuf' ,'remis à neuf', 'réparation']),
+        'height' =>$faker->numberBetween(2, 16),
+        'width' => $faker->numberBetween(4,10),
+        'surface'=> $faker->numberBetween(12, 30),
     ];
 });

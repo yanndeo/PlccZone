@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "458c1c7da94ad2bb473f23dfa194c4b6",
+    "content-hash": "d0f4617d80bc0616842d8389d8210a16",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1171,6 +1171,73 @@
                 "storage"
             ],
             "time": "2019-03-30T13:22:34+00:00"
+        },
+        {
+            "name": "mews/captcha",
+            "version": "2.2.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mewebstudio/captcha.git",
+                "reference": "77ee353db8d92c001b411a0afbb7b3ccb71500b0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mewebstudio/captcha/zipball/77ee353db8d92c001b411a0afbb7b3ccb71500b0",
+                "reference": "77ee353db8d92c001b411a0afbb7b3ccb71500b0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "illuminate/config": "~5.0",
+                "illuminate/filesystem": "~5.0",
+                "illuminate/hashing": "~5.0",
+                "illuminate/support": "~5.0",
+                "intervention/image": "~2.2",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "~4.1"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mews\\Captcha\\CaptchaServiceProvider"
+                    ],
+                    "aliases": {
+                        "Captcha": "Mews\\Captcha\\Facades\\Captcha"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mews\\Captcha\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Muharrem ERİN",
+                    "email": "me@mewebstudio.com",
+                    "homepage": "https://github.com/mewebstudio",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5 Captcha Package",
+            "homepage": "https://github.com/mewebstudio/captcha",
+            "keywords": [
+                "captcha",
+                "laravel5 Captcha",
+                "laravel5 Security"
+            ],
+            "time": "2019-04-19T12:35:00+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3616,16 +3683,16 @@
         },
         {
             "name": "fzaninotto/faker",
-            "version": "v1.8.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "f72816b43e74063c8b10357394b6bba8cb1c10de"
+                "reference": "fb218ada627f7c750c6e0e41cae486d2db48e911"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/f72816b43e74063c8b10357394b6bba8cb1c10de",
-                "reference": "f72816b43e74063c8b10357394b6bba8cb1c10de",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/fb218ada627f7c750c6e0e41cae486d2db48e911",
+                "reference": "fb218ada627f7c750c6e0e41cae486d2db48e911",
                 "shasum": ""
             },
             "require": {
@@ -3639,7 +3706,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.8-dev"
+                    "dev-master": "1.9-dev"
                 }
             },
             "autoload": {
@@ -3662,7 +3729,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2018-07-12T10:23:15+00:00"
+            "time": "2019-04-16T09:48:34+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -5263,7 +5330,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "fzaninotto/faker": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

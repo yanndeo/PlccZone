@@ -9,7 +9,18 @@ use App\Models\Category;
 
 class Product extends Model
 {
-    protected $fillable=['name', 'slug','reference','description','brand_id','category_id' ,'etat_stock'];
+    protected $fillable=[
+        'name',
+        'slug',
+        'reference',
+        'description',
+        'brand_id',
+        'category_id' ,
+        'availability',
+        'state', //etat : neuf , Remis à neuf,réparation,
+        'height',
+        'width',
+        'surface'];
 
     protected $appends = ['brand_name','category_title'] ;
 
@@ -37,6 +48,10 @@ class Product extends Model
         return $this->belongsTo(Category::class); //appatient à une categorie
     }
 
+    public function specifities()
+    {
+        return $this->belongsTo();   //appartient à une marque
+    }
 
     /* *******************************  ACCESSEUR ******************* **/
 

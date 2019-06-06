@@ -1,7 +1,7 @@
 @extends('base.app')
 
 @section('meta')
-    <meta name="description" content="produtc">
+    <meta name="description" content="article {{ $product->name }} ">
     <meta name="keywords" content="">
 @show
 
@@ -49,10 +49,14 @@
                 <div class="col-lg-5 offset-lg-1">
                     <div class="s_product_text">
                         <h3> {{ $product->name }} </h3>
+
                         <h2>  {{ $product->reference }}</h2>
+
                         <ul class="list">
                             <li><a class="active" href="#"><span>Categorie</span> : {{ $product->category_title }} </a></li>
-                            <li><a href="#"><span>Disponibilité</span> : {{ $product->etat_stock }} </a></li>
+                            <li><a href="#"><span>Disponibilité : </span> {{ $product->availability }}
+                                </a>
+                            </li>
                         </ul>
 
                         <p>
@@ -78,144 +82,87 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                       aria-selected="false">Specification</a>
+                       aria-selected="false">Spécification du produit </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                    <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
                        aria-selected="false">Devis specifique</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+                    <a class="nav-link " id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
                        aria-selected="false">Mode de payement</a>
                 </li>
             </ul>
+
+
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <p>
-
                         {{ $product->description }}
                     </p>
                 </div>
+
+
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="table-responsive">
                         <table class="table">
                             <tbody>
                             <tr>
                                 <td>
-                                    <h5>Width</h5>
+                                    <h5>État du Stock</h5>
                                 </td>
                                 <td>
-                                    <h5>128mm</h5>
+                                    <h5> {{ $product->availability }} </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Height</h5>
+                                    <h5>Largeur</h5>
                                 </td>
                                 <td>
-                                    <h5>508mm</h5>
+                                    <h5>{{ $product->width }} cm </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Depth</h5>
+                                    <h5>Hauteur</h5>
                                 </td>
                                 <td>
-                                    <h5>85mm</h5>
+                                    <h5> {{ $product->heigth }} cm</h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Weight</h5>
+                                    <h5> surface </h5>
                                 </td>
                                 <td>
-                                    <h5>52gm</h5>
+                                    <h5> {{ $product->surface }} m2</h5>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <h5>Quality checking</h5>
-                                </td>
-                                <td>
-                                    <h5>yes</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Freshness Duration</h5>
-                                </td>
-                                <td>
-                                    <h5>03days</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>When packeting</h5>
-                                </td>
-                                <td>
-                                    <h5>Without touch of hand</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Each Box contains</h5>
-                                </td>
-                                <td>
-                                    <h5>60pcs</h5>
-                                </td>
-                            </tr>
+
+
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+
+                <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                     <div class="row">
                         <div class="col-lg-8">
-                            <div class="review_box">
-                                <h4>Post a comment</h4>
-                                <form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" id="email" name="email" placeholder="Quantité">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <textarea class="form-control" name="message" id="message" rows="1" placeholder="Message"></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 text-right">
-                                        <button type="submit" value="submit" class="btn btn-block primary-btn">DEMANDER VOTRE DEVIS</button>
-                                    </div>
-                                </form>
+                            <div class="review_box" id="devis_form" data-namepb="{{ $product->name }}">
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+
+
+
+                <div class="tab-pane fade " id="review" role="tabpanel" aria-labelledby="review-tab">
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="order_box">
-                                <h2>Your Order</h2>
+                                <h2> Nos moyens de payements </h2>
 
                                 <div class="payment_item">
                                     <div class="radion_btn">

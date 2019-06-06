@@ -20,17 +20,23 @@ class CreateProductsTable extends Migration
 
             $table->string('reference')->unique()->nullable();
             $table->text('description')->nullable();
-            $table->boolean('etat_stock')->default(1);
+
+            $table->boolean('availability')->default(1);
+            $table->enum('state', ['neuf', 'remis à neuf', 'reparation']);
+            $table->string('width')->nullable();
+            $table->string('height')->nullable();
+            $table->string('surface')->nullable();
+
 
             $table->unsignedInteger('brand_id')
-                ->foreign('brand_id')
-                ->references('id')
-                ->on('brands');
+                  ->foreign('brand_id')
+                  ->references('id')
+                  ->on('brands');
 
             $table->unsignedInteger('category_id')
-                ->foreign('category_id')
-                ->references('id')
-                ->on('categories');
+                  ->foreign('category_id')
+                  ->references('id')
+                  ->on('categories');
             $table->timestamps();
         });
     }

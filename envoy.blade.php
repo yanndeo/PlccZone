@@ -22,7 +22,6 @@ $limiteless = 3;
     update_symlinks
     update_permissions
     migrate
-    up
 @endmacro
 
 @task('prepare')

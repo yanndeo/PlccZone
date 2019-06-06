@@ -7,8 +7,6 @@ import DataTable from "./data-table";
 import BrandList from './brands-list';
 import CategoriesList from "./categories-list";
 import BrandCurrent from "./brand-current";
-
-
 import Loader from '../data/loader';
 import {connect} from 'react-redux'
 //actions
@@ -29,14 +27,11 @@ import { _DATA_ARTICLES_INITIAL, _FAILURES_DATA_ARTICLES, _BRANDS , _CATEGORIES 
                 //action redux
                  this.props.dispatch(_DATA_ARTICLES_INITIAL(Response.data.products)); // type and value define in index.js action datalistInitial
                  this.props.dispatch(_BRANDS(Response.data.brands)); 
-                 this.props.dispatch(_CATEGORIES(Response.data.categories)); 
-
+                 this.props.dispatch(_CATEGORIES(Response.data.categories));
             })
             .catch((error)=>{
-
                 console.log(error);
                 this.props.dispatch(_FAILURES_DATA_ARTICLES(error));
-               // console.log("look-error",error.response.statusText, error.response.status );
             });
     }
 
@@ -58,7 +53,6 @@ import { _DATA_ARTICLES_INITIAL, _FAILURES_DATA_ARTICLES, _BRANDS , _CATEGORIES 
 
                 <div className="col-xl-9 col-lg-8 col-md-7">
                         <BrandCurrent brand={currentBrand} />
-
                         {isLoading ? <Loader /> : <DataTable articles={articles} /> }
                 </div>
             </div>
@@ -76,7 +70,6 @@ const mapStateToProps =(state) =>{
         isLoading: state.filterDataArticleList.isLoading,
         error: state.filterDataArticleList.error,
         currentBrand: state.filterDataArticleList.currentBrand,
-
         brands: state.listeBrandANDCategory.brand_list,
         categories: state.listeBrandANDCategory.caegory_list
     };
