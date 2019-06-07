@@ -109,10 +109,10 @@
                             <tbody>
                             <tr>
                                 <td>
-                                    <h5>État du Stock</h5>
+                                    <h5>État du produit</h5>
                                 </td>
                                 <td>
-                                    <h5> {{ $product->availability }} </h5>
+                                    <h5> {{ $product->state }} </h5>
                                 </td>
                             </tr>
                             <tr>

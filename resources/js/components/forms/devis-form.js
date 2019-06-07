@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react'
 import ReactDOM from "react-dom";
+//Action
 import { _ASKED_DEVIS } from '../../actions';
-import AlertNotification from '../data/alert-notification';
+//Component
+import { ShowNotification } from '../data/notification';
 
 
 
@@ -37,6 +39,8 @@ componentDidMount(){
      });
 }
 
+
+
     //Change value
      handleFieldChange =(e)=> {
       this.setState({
@@ -44,25 +48,22 @@ componentDidMount(){
         })
     }
 
-    displayNotifification =(type, messag)=>{
-        
-       return setTimeout(function(){
-           return  <AlertNotification type="yg" messag="gggg" />
-        }, 1000);
-    }
 
     handleSubmit=(e)=>{
-        if(this.state.isVerified){
+        e.preventDefault(); //dont reload me page
 
-            e.preventDefault();
+
+         //Check if capctha is true and load
+        if(this.state.isVerified){
             const formData = this.state.formData
-            alert('ggg')
             console.log('state', formData);
-            //Check if capctha is true and load
             //call axios that send data
-            _ASKED_DEVIS(formData)
+            _ASKED_DEVIS(formData).then(()=>{
             //Show message ui friendly
+             })
         }else{
+
+            ShowNotification('error', "Merci Seigneur");
 
         }
 
@@ -76,18 +77,14 @@ componentDidMount(){
         return (
             <Fragment>
 
-            { this.displayNotifification('danger', 'truccccc')}
-
-             
-
                 <h4>Demander votre devis concernant cet article </h4>
 
                 <form
                     className="row contact_form"
                     id="contactForm"
                     noValidate="novalidate"
-                    onSubmit={e => this.handleSubmit(e)}
-                >
+                    onSubmit={e => this.handleSubmit(e)} >
+
                     <div className="col-md-12">
                         <div className="form-group">
                             <input
@@ -97,8 +94,7 @@ componentDidMount(){
                                 name="fullname"
                                 placeholder="Nom complet"
                                 value={fullname}
-                                onChange={e =>this.handleFieldChange(e)}
-                            />
+                                onChange={e =>this.handleFieldChange(e)}/>
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -110,8 +106,7 @@ componentDidMount(){
                                 name="entreprise"
                                 placeholder="Entreprise"
                                 value={entreprise}
-                                onChange={e => this.handleFieldChange(e)  }
-                            />
+                                onChange={e => this.handleFieldChange(e)} />
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -123,8 +118,7 @@ componentDidMount(){
                                 name="email"
                                 placeholder="Email Address"
                                 value={email}
-                                onChange={e => this.handleFieldChange(e)}
-                            />
+                                onChange={e => this.handleFieldChange(e)} />
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -137,8 +131,7 @@ componentDidMount(){
                                 min="1"
                                 placeholder="Quantité"
                                 value={qte}
-                                onChange={e => this.handleFieldChange(e) }
-                            />
+                                onChange={e => this.handleFieldChange(e)} />
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -150,8 +143,7 @@ componentDidMount(){
                                 name="tel"
                                 placeholder="Telephone"
                                 value={tel}
-                                onChange={e =>this.handleFieldChange(e)  }
-                            />
+                                onChange={e =>this.handleFieldChange(e)} />
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -163,17 +155,14 @@ componentDidMount(){
                                 rows="1"
                                 placeholder="Message"
                                 value={message}
-                                onChange={e => this.handleFieldChange(e) }
-                            />
+                                onChange={e => this.handleFieldChange(e)} />
                         </div>
                     </div>
 
                     <div className="col-md-12 text-right">
                         <button
                             type="submit"
-                            value="submit"
-                            className="btn btn-block primary-btn"
-                        >
+                            className="btn btn-block primary-btn">
                             DEMANDER VOTRE DEVIS
                         </button>
                     </div>
