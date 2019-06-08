@@ -58,6 +58,7 @@ componentDidMount(){
             const formData = this.state.formData
             console.log('state', formData);
             //call axios that send data
+            //console.log(_ASKED_DEVIS) verifions quelle return une promesse : via fetch ?
             _ASKED_DEVIS(formData).then(()=>{
             //Show message ui friendly
              })
