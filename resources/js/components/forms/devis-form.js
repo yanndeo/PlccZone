@@ -2,90 +2,106 @@ import React, { Component, Fragment } from 'react'
 import ReactDOM from "react-dom";
 //Action
 import { _ASKED_DEVIS } from '../../actions';
-//Component
-import { ShowNotification } from '../data/notification';
+//Utils
+import { ShowNotification } from "../utils/notification";
+//Components
+import ReCaptchaComponent from "./reCaptcha";
+
 
 
 
 class DevisForm extends Component {
+    constructor(props) {
+        super(props);
 
+        this.state = {
+            formData: {
+                namepb: "",
+                fullname: "",
+                entreprise: "",
+                email: "",
+                qte: "",
+                tel: "",
+                message: ""
+            },
 
-constructor(props){
-    super(props)
-
-    this.state ={
-       formData:{
-           namepb: '',
-           fullname: '',
-           entreprise: '',
-           email: '',
-           qte: '',
-           tel: '',
-           message: ''
-       },
-
-       loader: true,
-       isVerified: false,
-
+            loader: true,
+            isVerified: false
+        };
     }
 
+    componentDidMount() {
+        const { namepb } = this.props;
+        this.setState({
+            formData: { ...this.state.formData, namepb }
+        });
+    }
 
-}
-
-componentDidMount(){
-    const { namepb } = this.props
-    this.setState({
-        formData: { ...this.state.formData, namepb}
-     });
-}
-
-
+    
 
     //Change value
-     handleFieldChange =(e)=> {
-      this.setState({
-          formData: { ...this.state.formData, [e.target.name]: e.target.value,  }
-        })
+    handleFieldChange = e => {
+        this.setState({
+            formData: {
+                ...this.state.formData,
+                [e.target.name]: e.target.value
+            }
+        });
+    };
+
+    handleVerifyCallback=(recaptcha_value)=>{
+        console.log('recaptch-in-devis-form', recaptcha_value)
+
+        this.setState({ isVerified: recaptcha_value})
     }
 
 
-    handleSubmit=(e)=>{
+    handleSubmit = e => {
         e.preventDefault(); //dont reload me page
-
-
-         //Check if capctha is true and load
-        if(this.state.isVerified){
-            const formData = this.state.formData
-            console.log('state', formData);
+        //Check if capctha is true and load
+        if (this.state.isVerified) {
+            const formData = this.state.formData;
+            console.log("state", formData);
             //call axios that send data
             //console.log(_ASKED_DEVIS) verifions quelle return une promesse : via fetch ?
-            _ASKED_DEVIS(formData).then(()=>{
-            //Show message ui friendly
-             })
-        }else{
-
-            ShowNotification('error', "Merci Seigneur");
-
+            _ASKED_DEVIS(formData).then(() => {
+                //Show message ui friendly
+            });
+        } else {
+            ShowNotification("error", "Please verify that you are a human!  ");
         }
+    };
 
-    }
+
+
+
+
+
+
+
+
+
 
     render() {
-
-
-        const { fullname, entreprise, email, qte, tel, message } = this.state.formData ;
+        const {
+            fullname,
+            entreprise,
+            email,
+            qte,
+            tel,
+            message
+        } = this.state.formData;
 
         return (
             <Fragment>
-
                 <h4>Demander votre devis concernant cet article </h4>
 
                 <form
                     className="row contact_form"
                     id="contactForm"
                     noValidate="novalidate"
-                    onSubmit={e => this.handleSubmit(e)} >
-
+                    onSubmit={e => this.handleSubmit(e)}
+                >
                     <div className="col-md-12">
                         <div className="form-group">
                             <input
@@ -95,7 +111,8 @@ componentDidMount(){
                                 name="fullname"
                                 placeholder="Nom complet"
                                 value={fullname}
-                                onChange={e =>this.handleFieldChange(e)}/>
+                                onChange={e => this.handleFieldChange(e)}
+                            />
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -107,7 +124,8 @@ componentDidMount(){
                                 name="entreprise"
                                 placeholder="Entreprise"
                                 value={entreprise}
-                                onChange={e => this.handleFieldChange(e)} />
+                                onChange={e => this.handleFieldChange(e)}
+                            />
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -119,7 +137,8 @@ componentDidMount(){
                                 name="email"
                                 placeholder="Email Address"
                                 value={email}
-                                onChange={e => this.handleFieldChange(e)} />
+                                onChange={e => this.handleFieldChange(e)}
+                            />
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -132,7 +151,8 @@ componentDidMount(){
                                 min="1"
                                 placeholder="Quantité"
                                 value={qte}
-                                onChange={e => this.handleFieldChange(e)} />
+                                onChange={e => this.handleFieldChange(e)}
+                            />
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -144,7 +164,8 @@ componentDidMount(){
                                 name="tel"
                                 placeholder="Telephone"
                                 value={tel}
-                                onChange={e =>this.handleFieldChange(e)} />
+                                onChange={e => this.handleFieldChange(e)}
+                            />
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -156,14 +177,21 @@ componentDidMount(){
                                 rows="1"
                                 placeholder="Message"
                                 value={message}
-                                onChange={e => this.handleFieldChange(e)} />
+                                onChange={e => this.handleFieldChange(e)}
+                            />
                         </div>
+                    </div>
+                    <div className="col-md-12">
+                        <ReCaptchaComponent
+                           // onloadCallback={e => this.handleOnloadCallback()}
+                            handleVerifyCallback={ this.handleVerifyCallback}
+                        />
                     </div>
 
                     <div className="col-md-12 text-right">
                         <button
                             type="submit"
-                            className="btn btn-block primary-btn">
+                            className="btn btn-block primary-btn" >
                             DEMANDER VOTRE DEVIS
                         </button>
                     </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { API_END_POINT } from '../data/uri';
+import { API_END_POINT } from "../utils/uri";
 import {connect} from 'react-redux'
 import axios from 'axios';
 import Suggestions from './Suggestions';

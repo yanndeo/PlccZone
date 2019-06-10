@@ -82,8 +82,9 @@ export const _ASKED_DEVIS = async (data) => {
 
     try {
 
-        console.log('to_action_asked', data)
+        console.log('to_action_asked_devis', data)
         
+        //Creer route ine backend and send datas
        await axios.post('/')
         
     } catch (error) {

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {API_END_POINT} from "../data/uri";
+import {API_END_POINT} from "../utils/uri";
 //Components
 import DataTable from "./data-table";
 import BrandList from './brands-list';
 import CategoriesList from "./categories-list";
 import BrandCurrent from "./brand-current";
-import Loader from '../data/loader';
+import Loader from "../utils/loader";
 import {connect} from 'react-redux'
+
 //actions
 import { _DATA_ARTICLES_INITIAL, _FAILURES_DATA_ARTICLES, _BRANDS , _CATEGORIES } from "../../actions/index";
 

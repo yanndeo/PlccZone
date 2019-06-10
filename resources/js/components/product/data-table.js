@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
-import {STYLEBTN } from '../data/btnColor'
+import { STYLEBTN } from '../utils/btnColor'
 
 
 class DataTable extends Component {
