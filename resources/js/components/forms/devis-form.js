@@ -6,6 +6,7 @@ import { _ASKED_DEVIS } from '../../actions';
 import { ShowNotification } from "../utils/notification";
 //Components
 import ReCaptchaComponent from "./reCaptcha";
+import Loader from '../utils/loader';
 
 
 
@@ -25,11 +26,18 @@ class DevisForm extends Component {
                 message: ""
             },
 
-            loader: true,
-            isVerified: false
+            isloading: false,
+            isVerified: false,
         };
     }
 
+
+
+    /**
+     * apres le rendu de la page
+     * rempli dejà le champs caché 
+     * avec le nom de l'article 
+     */
     componentDidMount() {
         const { namepb } = this.props;
         this.setState({
@@ -39,7 +47,10 @@ class DevisForm extends Component {
 
     
 
-    //Change value
+    /**
+     * Change value of state 
+     * when we are filling form's fields
+     */
     handleFieldChange = e => {
         this.setState({
             formData: {
@@ -49,27 +60,64 @@ class DevisForm extends Component {
         });
     };
 
+
+
+
+    /**
+     *  handleVerifyCallback & handleOnloadCallback
+     *  Callback function
+     */
+
+    handleOnloadCallback = (recaptcha_loaded) => {
+        console.log('recaptch-in-devis-form-loaded', recaptcha_loaded)
+
+        this.setState({ isloading: recaptcha_loaded })
+    }
+
     handleVerifyCallback=(recaptcha_value)=>{
-        console.log('recaptch-in-devis-form', recaptcha_value)
+        console.log('recaptch-in-devis-form-verified', recaptcha_value)
 
         this.setState({ isVerified: recaptcha_value})
     }
 
 
+    
+
+
+
+
+
+
+    /**
+     * Send all datas using _ASKED_DEVIS() function 
+     * in actions file
+     */
     handleSubmit = e => {
-        e.preventDefault(); //dont reload me page
-        //Check if capctha is true and load
-        if (this.state.isVerified) {
-            const formData = this.state.formData;
-            console.log("state", formData);
-            //call axios that send data
-            //console.log(_ASKED_DEVIS) verifions quelle return une promesse : via fetch ?
-            _ASKED_DEVIS(formData).then(() => {
-                //Show message ui friendly
-            });
-        } else {
-            ShowNotification("error", "Please verify that you are a human!  ");
+
+        //Don't reload me page please
+        e.preventDefault(); 
+
+        if(this.state.isloading){
+
+             //Check if capctha is true and load
+            if (this.state.isVerified) {
+
+                const formData = this.state.formData;
+                console.log("state", formData);
+                //call axios that send data
+                //console.log(_ASKED_DEVIS) verifions quelle return une promesse : via fetch ?
+
+                _ASKED_DEVIS(formData).then(() => {
+                    //Show message ui friendly
+                    ShowNotification("success", "Message envoyé.Merci pour votre confiance ");
+
+                });
+            } else {
+                ShowNotification("error", "Please verify that you are a human!  ");
+            }
         }
+
+        
     };
 
 
@@ -181,11 +229,11 @@ class DevisForm extends Component {
                             />
                         </div>
                     </div>
+
                     <div className="col-md-12">
                         <ReCaptchaComponent
-                           // onloadCallback={e => this.handleOnloadCallback()}
-                            handleVerifyCallback={ this.handleVerifyCallback}
-                        />
+                            handleOnloadCallback={this.handleOnloadCallback }
+                            handleVerifyCallback={ this.handleVerifyCallback} />
                     </div>
 
                     <div className="col-md-12 text-right">
@@ -196,12 +244,15 @@ class DevisForm extends Component {
                         </button>
                     </div>
                 </form>
+
+                {/* { !this.state.isloading && <Loader/> } */}
             </Fragment>
         );
     }
 }
 
 if (document.getElementById('devis_form')) {
+    
     const elmtForm = document.getElementById("devis_form");
     const props = Object.assign({}, elmtForm.dataset);
 

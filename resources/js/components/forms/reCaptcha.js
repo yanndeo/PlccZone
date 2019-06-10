@@ -7,26 +7,55 @@ export default class ReCaptchaComponent extends Component {
     constructor(props){
         super(props)
         this.state = {
-            isVerifiedLocal: false
+
+            isVerifiedLocal: false,
+            isLoadedLocal: false
         }
     }
 
+
+    /**
+     * Au chargement du reacptcha
+     */
     onloadCallback = () => {
-        console.log('recaptch load successfully')
+
+        let loadValue ;
+
+        this.setState({ isLoadedLocal : !this.state.isLoadedLocal}, ()=>{
+            
+            loadValue = this.state.isLoadedLocal 
+
+            console.log('rloader', loadValue);
+
+            this.props.handleOnloadCallback(loadValue);
+
+            console.log('recaptch load successfully')
+        });
+
+        
     }
 
 
+
+    /**
+     * Verifie le check du recaptcha
+     */
     verifyCallback =  () => {
-        console.log('recaptch verify successfully')
-        //this.props.verifyCallback();
+
         let value;
-         this.setState({ isVerifiedLocal : !this.state.isVerifiedLocal}, ()=>{
+
+        this.setState({ isVerifiedLocal : !this.state.isVerifiedLocal}, ()=>{
 
             value= this.state.isVerifiedLocal;
-         }) ;
-        console.log('rsate',value)
 
-        this.props.handleVerifyCallback(value) ;
+            console.log('rstate', value)
+
+            this.props.handleVerifyCallback(value);
+            
+            console.log("recaptch verify successfully");
+         }) 
+
+      
 
     }
 

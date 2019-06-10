@@ -83994,6 +83994,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions */ "./resources/js/actions/index.js");
 /* harmony import */ var _utils_notification__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/notification */ "./resources/js/components/utils/notification.js");
 /* harmony import */ var _reCaptcha__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./reCaptcha */ "./resources/js/components/forms/reCaptcha.js");
+/* harmony import */ var _utils_loader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/loader */ "./resources/js/components/utils/loader.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
@@ -84025,6 +84026,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var DevisForm =
 /*#__PURE__*/
 function (_Component) {
@@ -84043,8 +84045,16 @@ function (_Component) {
       });
     });
 
+    _defineProperty(_assertThisInitialized(_this), "handleOnloadCallback", function (recaptcha_loaded) {
+      console.log('recaptch-in-devis-form-loaded', recaptcha_loaded);
+
+      _this.setState({
+        isloading: recaptcha_loaded
+      });
+    });
+
     _defineProperty(_assertThisInitialized(_this), "handleVerifyCallback", function (recaptcha_value) {
-      console.log('recaptch-in-devis-form', recaptcha_value);
+      console.log('recaptch-in-devis-form-verified', recaptcha_value);
 
       _this.setState({
         isVerified: recaptcha_value
@@ -84052,18 +84062,23 @@ function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleSubmit", function (e) {
-      e.preventDefault(); //dont reload me page
-      //Check if capctha is true and load
+      //Don't reload me page please
+      e.preventDefault();
 
-      if (_this.state.isVerified) {
-        var formData = _this.state.formData;
-        console.log("state", formData); //call axios that send data
-        //console.log(_ASKED_DEVIS) verifions quelle return une promesse : via fetch ?
+      if (_this.state.isloading) {
+        //Check if capctha is true and load
+        if (_this.state.isVerified) {
+          var formData = _this.state.formData;
+          console.log("state", formData); //call axios that send data
+          //console.log(_ASKED_DEVIS) verifions quelle return une promesse : via fetch ?
 
-        Object(_actions__WEBPACK_IMPORTED_MODULE_2__["_ASKED_DEVIS"])(formData).then(function () {//Show message ui friendly
-        });
-      } else {
-        Object(_utils_notification__WEBPACK_IMPORTED_MODULE_3__["ShowNotification"])("error", "Please verify that you are a human!  ");
+          Object(_actions__WEBPACK_IMPORTED_MODULE_2__["_ASKED_DEVIS"])(formData).then(function () {
+            //Show message ui friendly
+            Object(_utils_notification__WEBPACK_IMPORTED_MODULE_3__["ShowNotification"])("success", "Message envoyé.Merci pour votre confiance ");
+          });
+        } else {
+          Object(_utils_notification__WEBPACK_IMPORTED_MODULE_3__["ShowNotification"])("error", "Please verify that you are a human!  ");
+        }
       }
     });
 
@@ -84077,11 +84092,17 @@ function (_Component) {
         tel: "",
         message: ""
       },
-      loader: true,
+      isloading: false,
       isVerified: false
     };
     return _this;
   }
+  /**
+   * apres le rendu de la page
+   * rempli dejà le champs caché 
+   * avec le nom de l'article 
+   */
+
 
   _createClass(DevisForm, [{
     key: "componentDidMount",
@@ -84092,7 +84113,11 @@ function (_Component) {
           namepb: namepb
         })
       });
-    } //Change value
+    }
+    /**
+     * Change value of state 
+     * when we are filling form's fields
+     */
 
   }, {
     key: "render",
@@ -84200,8 +84225,8 @@ function (_Component) {
         }
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-12"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_reCaptcha__WEBPACK_IMPORTED_MODULE_4__["default"] // onloadCallback={e => this.handleOnloadCallback()}
-      , {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_reCaptcha__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        handleOnloadCallback: this.handleOnloadCallback,
         handleVerifyCallback: this.handleVerifyCallback
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-12 text-right"
@@ -84282,30 +84307,45 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ReCaptchaComponent).call(this, props));
 
     _defineProperty(_assertThisInitialized(_this), "onloadCallback", function () {
-      console.log('recaptch load successfully');
+      var loadValue;
+
+      _this.setState({
+        isLoadedLocal: !_this.state.isLoadedLocal
+      }, function () {
+        loadValue = _this.state.isLoadedLocal;
+        console.log('rloader', loadValue);
+
+        _this.props.handleOnloadCallback(loadValue);
+
+        console.log('recaptch load successfully');
+      });
     });
 
     _defineProperty(_assertThisInitialized(_this), "verifyCallback", function () {
-      console.log('recaptch verify successfully'); //this.props.verifyCallback();
-
       var value;
 
       _this.setState({
         isVerifiedLocal: !_this.state.isVerifiedLocal
       }, function () {
         value = _this.state.isVerifiedLocal;
+        console.log('rstate', value);
+
+        _this.props.handleVerifyCallback(value);
+
+        console.log("recaptch verify successfully");
       });
-
-      console.log('rsate', value);
-
-      _this.props.handleVerifyCallback(value);
     });
 
     _this.state = {
-      isVerifiedLocal: false
+      isVerifiedLocal: false,
+      isLoadedLocal: false
     };
     return _this;
   }
+  /**
+   * Au chargement du reacptcha
+   */
+
 
   _createClass(ReCaptchaComponent, [{
     key: "render",

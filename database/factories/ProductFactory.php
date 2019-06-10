@@ -8,7 +8,7 @@ $factory->define(App\Models\Product::class, function (Faker $faker) {
         'category_id' =>random_int(\DB::table('categories')->min('id'), \DB::table('categories')->max('id')),
         'name' => $faker->colorName,
         'reference' =>$faker->unique()->creditCardNumber(null,true,'-'),
-        'description' => $faker->text(100),
+        'description' => $faker->text(500),
 
         'availability' =>$faker->boolean(),
         'state'=> $faker->randomElement(['neuf' ,'remis à neuf', 'réparation']),
