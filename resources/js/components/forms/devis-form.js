@@ -174,25 +174,18 @@ class DevisForm extends Component {
 
 
     render() {
-        const {
-            fullname,
-            entreprise,
-            email,
-            qte,
-            tel,
-            message
-        } = this.state.formData;
+        const { fullname, entreprise,email, qte, tel, message } = this.state.formData;
 
         return (
             <Fragment>
                 <h4>Demander votre devis concernant cet article </h4>
+
                 {this.renderErrorAlert()}
               
-
                 <form
                     className="row contact_form"
                     id="contactForm"
-                    //noValidate="novalidate"
+                    noValidate="novalidate"
                     onSubmit={e => this.handleSubmit(e)}>
                     
                     <div className="col-md-12">
@@ -207,7 +200,7 @@ class DevisForm extends Component {
                                 onChange={e =>this.handleFieldChange(e)  }
                                 required
                             />
-                            {this.renderErrorFor('name')}
+                            {this.renderErrorFor('fullname')}
 
                         </div>
                     </div>

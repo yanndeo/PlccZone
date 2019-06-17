@@ -84205,8 +84205,8 @@ function (_Component) {
           message = _this$state$formData.message;
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h4", null, "Demander votre devis concernant cet article "), this.renderErrorAlert(), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
         className: "row contact_form",
-        id: "contactForm" //noValidate="novalidate"
-        ,
+        id: "contactForm",
+        noValidate: "novalidate",
         onSubmit: function onSubmit(e) {
           return _this2.handleSubmit(e);
         }
@@ -84225,7 +84225,7 @@ function (_Component) {
           return _this2.handleFieldChange(e);
         },
         required: true
-      }), this.renderErrorFor('name'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }), this.renderErrorFor('fullname'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
