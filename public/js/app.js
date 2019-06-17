@@ -83793,21 +83793,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_ASKED_DEVIS", function() { return _ASKED_DEVIS; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_utils_uri__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/utils/uri */ "./resources/js/components/utils/uri.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+
 var INIT_DATALIST = "INIT_DATALIST";
 var BRAND_SELECTED = "BRAND_SELECTED";
 var CATEGORY_SELECTED = "CATEGORY_SELECTED";
 var FAILURES_DATA = "FAILURES_DATA";
 var BRAND_LIST = "BRAND_LIST";
-var CATEGORY_LIST = "CATEGORY_LIST"; //forms
-
+var CATEGORY_LIST = "CATEGORY_LIST";
 var ASKED_DEVIS = "ASKED_DEVIS";
  //defini dans ce fichier et appeller dans App ;plutot que de le construire dans les components
 
@@ -83847,37 +83848,44 @@ function _CATEGORIES(categories) {
     value: categories
   };
 }
+/**
+ * Simple request without action redux
+ */
+
 var _ASKED_DEVIS =
 /*#__PURE__*/
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(data) {
+    var response, errors;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            console.log('to_action_asked_devis', data); //Creer route ine backend and send datas
+            _context.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("".concat(_components_utils_uri__WEBPACK_IMPORTED_MODULE_1__["API_END_POINT"], "devis"), data);
 
-            _context.next = 4;
-            return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/');
+          case 3:
+            response = _context.sent;
+            console.log('Rdata', response.status);
+            return _context.abrupt("return", response);
 
-          case 4:
-            _context.next = 9;
-            break;
-
-          case 6:
-            _context.prev = 6;
+          case 8:
+            _context.prev = 8;
             _context.t0 = _context["catch"](0);
-            console.log('error_asked_edvis', _context.t0);
+            //error.response.data.errors;
+            console.log('error_asked_edvis', _context.t0.response.data);
+            errors = _context.t0.response;
+            return _context.abrupt("return", errors);
 
-          case 9:
+          case 13:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 6]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function _ASKED_DEVIS(_x) {
@@ -83987,15 +83995,22 @@ if (token) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions */ "./resources/js/actions/index.js");
-/* harmony import */ var _utils_notification__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/notification */ "./resources/js/components/utils/notification.js");
-/* harmony import */ var _reCaptcha__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./reCaptcha */ "./resources/js/components/forms/reCaptcha.js");
-/* harmony import */ var _utils_loader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/loader */ "./resources/js/components/utils/loader.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../actions */ "./resources/js/actions/index.js");
+/* harmony import */ var _utils_notification__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/notification */ "./resources/js/components/utils/notification.js");
+/* harmony import */ var _reCaptcha__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./reCaptcha */ "./resources/js/components/forms/reCaptcha.js");
+
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -84023,7 +84038,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  //Utils
 
  //Components
-
 
 
 
@@ -84061,24 +84075,67 @@ function (_Component) {
       });
     });
 
-    _defineProperty(_assertThisInitialized(_this), "handleSubmit", function (e) {
-      //Don't reload me page please
-      e.preventDefault();
+    _defineProperty(_assertThisInitialized(_this), "handleSubmit",
+    /*#__PURE__*/
+    function () {
+      var _ref = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(e) {
+        var formData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                //Don't reload me page please
+                e.preventDefault();
 
-      if (_this.state.isloading) {
-        //Check if capctha is true and load
-        if (_this.state.isVerified) {
-          var formData = _this.state.formData;
-          console.log("state", formData); //call axios that send data
-          //console.log(_ASKED_DEVIS) verifions quelle return une promesse : via fetch ?
+                if (_this.state.isloading) {
+                  //Check if capctha is true and load
+                  if (!_this.state.isVerified) {
+                    formData = _this.state.formData;
+                    console.log("state", formData);
 
-          Object(_actions__WEBPACK_IMPORTED_MODULE_2__["_ASKED_DEVIS"])(formData).then(function () {
-            //Show message ui friendly
-            Object(_utils_notification__WEBPACK_IMPORTED_MODULE_3__["ShowNotification"])("success", "Message envoyé.Merci pour votre confiance ");
-          });
-        } else {
-          Object(_utils_notification__WEBPACK_IMPORTED_MODULE_3__["ShowNotification"])("error", "Please verify that you are a human!  ");
-        }
+                    Object(_actions__WEBPACK_IMPORTED_MODULE_3__["_ASKED_DEVIS"])(formData).then(function (response) {
+                      console.log('to_front', response.status);
+
+                      if (response.status === 200) {
+                        Object(_utils_notification__WEBPACK_IMPORTED_MODULE_4__["ShowNotification"])("success", "Message envoyé.Merci pour votre confiance ");
+                      }
+
+                      if (response.status === 422) {
+                        console.log('gestion_derreur', response.data.errors);
+
+                        _this.setState({
+                          errors: response.data.errors
+                        });
+                      }
+                    })["catch"](function (error) {
+                      console.log('err_front', error);
+                    });
+                  } else {
+                    Object(_utils_notification__WEBPACK_IMPORTED_MODULE_4__["ShowNotification"])("error", "Please verify that you are a human!  ");
+                  }
+                }
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }());
+
+    _defineProperty(_assertThisInitialized(_this), "renderErrorAlert", function () {
+      if (_this.state.errors != '') {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          className: "alert alert-danger",
+          role: "alert"
+        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ol", null, "\u2023 Un ou plusieurs champs du formulaire ne sont pas correctement renseign\xE9s.")));
       }
     });
 
@@ -84093,7 +84150,8 @@ function (_Component) {
         message: ""
       },
       isloading: false,
-      isVerified: false
+      isVerified: false,
+      errors: []
     };
     return _this;
   }
@@ -84120,6 +84178,20 @@ function (_Component) {
      */
 
   }, {
+    key: "hasErrorFor",
+    value: function hasErrorFor(field) {
+      return !!this.state.errors[field];
+    }
+  }, {
+    key: "renderErrorFor",
+    value: function renderErrorFor(field) {
+      if (this.hasErrorFor(field)) {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+          className: "invalid-feedback"
+        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, this.state.errors[field][0]));
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -84131,60 +84203,62 @@ function (_Component) {
           qte = _this$state$formData.qte,
           tel = _this$state$formData.tel,
           message = _this$state$formData.message;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Demander votre devis concernant cet article "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h4", null, "Demander votre devis concernant cet article "), this.renderErrorAlert(), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
         className: "row contact_form",
-        id: "contactForm",
-        noValidate: "novalidate",
+        id: "contactForm" //noValidate="novalidate"
+        ,
         onSubmit: function onSubmit(e) {
           return _this2.handleSubmit(e);
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
         type: "text",
-        className: "form-control ",
+        className: "form-control ".concat(this.hasErrorFor('fullname') ? 'is-invalid' : ''),
         id: "name",
         name: "fullname",
-        placeholder: "Nom complet",
+        placeholder: "Mr/Mme XXX ",
         value: fullname,
         onChange: function onChange(e) {
           return _this2.handleFieldChange(e);
-        }
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        },
+        required: true
+      }), this.renderErrorFor('name'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
         type: "text",
-        className: "form-control",
+        className: "form-control ".concat(this.hasErrorFor('entreprise') ? 'is-invalid' : ''),
         id: "entreprise",
         name: "entreprise",
-        placeholder: "Entreprise",
+        placeholder: "Nom de votre entreprise ",
         value: entreprise,
         onChange: function onChange(e) {
           return _this2.handleFieldChange(e);
         }
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), this.renderErrorFor('entreprise'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
         type: "email",
-        className: "form-control ",
+        className: "form-control ".concat(this.hasErrorFor('email') ? 'is-invalid' : ''),
         id: "email",
         name: "email",
         placeholder: "Email Address",
         value: email,
         onChange: function onChange(e) {
           return _this2.handleFieldChange(e);
-        }
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        },
+        required: true
+      }), this.renderErrorFor('email'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
         type: "number",
         className: "form-control",
         id: "qte",
@@ -84195,26 +84269,26 @@ function (_Component) {
         onChange: function onChange(e) {
           return _this2.handleFieldChange(e);
         }
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
         type: "text",
-        className: "form-control",
-        id: "number",
+        className: "form-control ".concat(this.hasErrorFor('tel') ? 'is-invalid' : ''),
+        id: "tel",
         name: "tel",
         placeholder: "Telephone",
         value: tel,
         onChange: function onChange(e) {
           return _this2.handleFieldChange(e);
         }
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), this.renderErrorFor('tel'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "form-group"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
-        className: "form-control",
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("textarea", {
+        className: "form-control ".concat(this.hasErrorFor('message') ? 'is-invalid' : ''),
         name: "message",
         id: "message",
         rows: "1",
@@ -84223,14 +84297,14 @@ function (_Component) {
         onChange: function onChange(e) {
           return _this2.handleFieldChange(e);
         }
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), this.renderErrorFor('message'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_reCaptcha__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_reCaptcha__WEBPACK_IMPORTED_MODULE_5__["default"], {
         handleOnloadCallback: this.handleOnloadCallback,
         handleVerifyCallback: this.handleVerifyCallback
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12 text-right"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         type: "submit",
         className: "btn btn-block primary-btn"
       }, "DEMANDER VOTRE DEVIS"))));
@@ -84238,13 +84312,13 @@ function (_Component) {
   }]);
 
   return DevisForm;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
 if (document.getElementById('devis_form')) {
   var elmtForm = document.getElementById("devis_form");
   var props = Object.assign({}, elmtForm.dataset);
   console.log(props);
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DevisForm, props), document.getElementById("devis_form"));
+  react_dom__WEBPACK_IMPORTED_MODULE_2___default.a.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(DevisForm, props), document.getElementById("devis_form"));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (DevisForm);

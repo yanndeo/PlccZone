@@ -30,9 +30,16 @@ Route::namespace('Api')->group(function () {
 
     Route::get('/article/{slug}-{id}', 'ProductController@show')->name('article_show');
 
+
+    //Formulaire: contact & devis
+
+    Route::post('/api/devis', 'FormController@devisProduct')->name('devis_product');
+
     Route::get('/api/products', 'ProductController@loadProductApi');
 
     Route::get('/api/products/search/{item?}', 'ProductController@searchLike');
+
+
 
 
 });

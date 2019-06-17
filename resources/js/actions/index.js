@@ -1,3 +1,4 @@
+import {API_END_POINT} from "../components/utils/uri";
 
 export const INIT_DATALIST = "INIT_DATALIST"
 export const BRAND_SELECTED = "BRAND_SELECTED";
@@ -6,12 +7,9 @@ export const FAILURES_DATA = "FAILURES_DATA";
 
 export const BRAND_LIST = "BRAND_LIST";
 export const CATEGORY_LIST = "CATEGORY_LIST";
-
-//forms
 export const ASKED_DEVIS = "ASKED_DEVIS";
 
 import axios from 'axios'
-
 
 
 //defini dans ce fichier et appeller dans App ;plutot que de le construire dans les components
@@ -24,7 +22,6 @@ export function _DATA_ARTICLES_INITIAL(articles) {
         value: articles
     };
 }
-
 
 export function _SELECTED_BRAND(brand){
 
@@ -42,8 +39,6 @@ export function _SELECTED_CATEGORY(category) {
     };
 }
 
-
-
 export function _FAILURES_DATA_ARTICLES(error) {
 
     return {
@@ -52,7 +47,6 @@ export function _FAILURES_DATA_ARTICLES(error) {
     };
 }
 
-
 export function _BRANDS(brands) {
 
     return {
@@ -60,7 +54,6 @@ export function _BRANDS(brands) {
         value: brands
     };
 }
-
 
 export function _CATEGORIES(categories) {
 
@@ -76,23 +69,32 @@ export function _CATEGORIES(categories) {
 
 
 
+/**
+ * Simple request without action redux
+ */
 
-
-export const _ASKED_DEVIS = async (data) => {
+export const _ASKED_DEVIS = async(data) => {
 
     try {
 
-        console.log('to_action_asked_devis', data)
-        
-        //Creer route ine backend and send datas
-       await axios.post('/')
-        
-    } catch (error) {
-        console.log('error_asked_edvis', error)
+       const response =  await axios.post(`${API_END_POINT}devis`, data);
+
+       console.log('Rdata',response.status  )
+
+       return response;
+
+    } catch(error) {
+        //error.response.data.errors;
+        console.log('error_asked_edvis', error.response.data)
+        let errors = error.response;
+
+        return errors;
+       
     }
 
 
 }
+
 
 /**
  * Le paramètre type d'une action est obligatoire alors que 

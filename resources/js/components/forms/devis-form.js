@@ -6,12 +6,12 @@ import { _ASKED_DEVIS } from '../../actions';
 import { ShowNotification } from "../utils/notification";
 //Components
 import ReCaptchaComponent from "./reCaptcha";
-import Loader from '../utils/loader';
 
 
 
 
 class DevisForm extends Component {
+
     constructor(props) {
         super(props);
 
@@ -28,6 +28,7 @@ class DevisForm extends Component {
 
             isloading: false,
             isVerified: false,
+            errors: [],
         };
     }
 
@@ -92,7 +93,7 @@ class DevisForm extends Component {
      * Send all datas using _ASKED_DEVIS() function 
      * in actions file
      */
-    handleSubmit = e => {
+    handleSubmit = async (e) => {
 
         //Don't reload me page please
         e.preventDefault(); 
@@ -100,18 +101,33 @@ class DevisForm extends Component {
         if(this.state.isloading){
 
              //Check if capctha is true and load
-            if (this.state.isVerified) {
+            if (!this.state.isVerified) {
 
                 const formData = this.state.formData;
                 console.log("state", formData);
-                //call axios that send data
-                //console.log(_ASKED_DEVIS) verifions quelle return une promesse : via fetch ?
 
-                _ASKED_DEVIS(formData).then(() => {
-                    //Show message ui friendly
-                    ShowNotification("success", "Message envoyé.Merci pour votre confiance ");
+                _ASKED_DEVIS(formData)
+                    .then(response => {
+                         console.log('to_front', response.status )
 
-                });
+                        if(response.status === 200){
+                            ShowNotification("success", "Message envoyé.Merci pour votre confiance ");
+                        }
+
+                        if(response.status === 422){
+                            
+                            console.log('gestion_derreur', response.data.errors)
+                            this.setState({ errors: response.data.errors })
+                        } 
+                        
+
+                }).catch( (error)=>{
+                    console.log('err_front', error)
+
+                })
+
+
+
             } else {
                 ShowNotification("error", "Please verify that you are a human!  ");
             }
@@ -121,13 +137,40 @@ class DevisForm extends Component {
     };
 
 
+    /**
+     * 
+     * Gestion d'erreurs
+     */
 
+    renderErrorAlert = () => {
+        if (this.state.errors != '') {
+            return (
+                <div className="alert alert-danger" role="alert">
+                    <ul>
+                        <ol>
+                            &#8227; Un ou plusieurs champs du formulaire ne sont pas correctement renseignés.
+                        </ol>
+                    </ul>
+                </div>
+            )
+        }
+    }
 
+    hasErrorFor(field) {
+        return !!this.state.errors[field]
+    }
 
+    renderErrorFor(field) {
+        if (this.hasErrorFor(field)) {
+            return (
+                <span className='invalid-feedback'>
+                    <strong>{this.state.errors[field][0]}</strong>
+                </span>
+            )
+        }
+    }
 
-
-
-
+   
 
 
     render() {
@@ -143,50 +186,60 @@ class DevisForm extends Component {
         return (
             <Fragment>
                 <h4>Demander votre devis concernant cet article </h4>
+                {this.renderErrorAlert()}
+              
 
                 <form
                     className="row contact_form"
                     id="contactForm"
-                    noValidate="novalidate"
-                    onSubmit={e => this.handleSubmit(e)}
-                >
+                    //noValidate="novalidate"
+                    onSubmit={e => this.handleSubmit(e)}>
+                    
                     <div className="col-md-12">
                         <div className="form-group">
                             <input
                                 type="text"
-                                className="form-control "
+                                className={`form-control ${this.hasErrorFor('fullname') ? 'is-invalid' : ''}`}
                                 id="name"
                                 name="fullname"
-                                placeholder="Nom complet"
+                                placeholder="Mr/Mme XXX "
                                 value={fullname}
-                                onChange={e => this.handleFieldChange(e)}
+                                onChange={e =>this.handleFieldChange(e)  }
+                                required
                             />
+                            {this.renderErrorFor('name')}
+
                         </div>
                     </div>
                     <div className="col-md-12">
                         <div className="form-group">
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${this.hasErrorFor('entreprise') ? 'is-invalid' : ''}`}
                                 id="entreprise"
                                 name="entreprise"
-                                placeholder="Entreprise"
+                                placeholder="Nom de votre entreprise "
                                 value={entreprise}
-                                onChange={e => this.handleFieldChange(e)}
+                                onChange={e =>this.handleFieldChange(e)}
                             />
+                            {this.renderErrorFor('entreprise')}
+
                         </div>
                     </div>
                     <div className="col-md-12">
                         <div className="form-group">
                             <input
                                 type="email"
-                                className="form-control "
+                                className={`form-control ${this.hasErrorFor('email') ? 'is-invalid' : ''}`}
                                 id="email"
                                 name="email"
                                 placeholder="Email Address"
                                 value={email}
                                 onChange={e => this.handleFieldChange(e)}
+                                required
                             />
+                            {this.renderErrorFor('email')}
+
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -199,7 +252,7 @@ class DevisForm extends Component {
                                 min="1"
                                 placeholder="Quantité"
                                 value={qte}
-                                onChange={e => this.handleFieldChange(e)}
+                                onChange={e => this.handleFieldChange(e) }
                             />
                         </div>
                     </div>
@@ -207,19 +260,21 @@ class DevisForm extends Component {
                         <div className="form-group">
                             <input
                                 type="text"
-                                className="form-control"
-                                id="number"
+                                className={`form-control ${this.hasErrorFor('tel') ? 'is-invalid' : ''}`}                                
+                                id="tel"
                                 name="tel"
                                 placeholder="Telephone"
                                 value={tel}
-                                onChange={e => this.handleFieldChange(e)}
+                                onChange={e =>this.handleFieldChange(e) }
                             />
+                            {this.renderErrorFor('tel')}
+
                         </div>
                     </div>
                     <div className="col-md-12">
                         <div className="form-group">
                             <textarea
-                                className="form-control"
+                                className={`form-control ${this.hasErrorFor('message') ? 'is-invalid' : ''}`}                                
                                 name="message"
                                 id="message"
                                 rows="1"
@@ -227,35 +282,35 @@ class DevisForm extends Component {
                                 value={message}
                                 onChange={e => this.handleFieldChange(e)}
                             />
+                            {this.renderErrorFor('message')}
+
                         </div>
                     </div>
 
                     <div className="col-md-12">
                         <ReCaptchaComponent
-                            handleOnloadCallback={this.handleOnloadCallback }
-                            handleVerifyCallback={ this.handleVerifyCallback} />
+                            handleOnloadCallback={ this.handleOnloadCallback }
+                            handleVerifyCallback={ this.handleVerifyCallback }
+                        />
                     </div>
 
                     <div className="col-md-12 text-right">
                         <button
                             type="submit"
-                            className="btn btn-block primary-btn" >
+                            className="btn btn-block primary-btn">
                             DEMANDER VOTRE DEVIS
                         </button>
                     </div>
                 </form>
 
-                {/* { !this.state.isloading && <Loader/> } */}
             </Fragment>
         );
     }
 }
 
 if (document.getElementById('devis_form')) {
-    
     const elmtForm = document.getElementById("devis_form");
     const props = Object.assign({}, elmtForm.dataset);
-
     console.log(props)
     ReactDOM.render(
         <DevisForm {...props} />,
