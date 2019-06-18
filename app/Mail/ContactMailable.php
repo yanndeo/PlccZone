@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Helpers\Mail\MailTo;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -37,11 +38,9 @@ class ContactMailable extends Mailable
      */
     public function build()
     {
-        $mailFrom= config('plccnzone.admin_support_email');
 
-        //$obj = $this->object;
         return  $this->markdown('emails.contact')
-                        ->from($mailFrom,'plccnzone')
+                        ->from( MailTo::SupportPlatform(),'Plccnzone')
                         ->subject( $this->object);
     }
 }

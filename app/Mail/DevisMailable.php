@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Helpers\Mail\MailTo;
 use App\Models\Devis;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -35,13 +36,10 @@ class DevisMailable extends Mailable
      */
     public function build()
     {
-               
-        $mailFrom=config('plccnzone.admin_support_email');
 
-           // dd($this->itemDevis['namepb']);
-        return 
+        return
             $this->view('emails.devis')
-                 ->from($mailFrom,'PlccnZone')
+                 ->from(MailTo::SupportPlatform(),'PlccnZone')
                  ->subject('Nouvelle Demande de devis')
                  ->with([
                     'produit' => $this->itemDevis['namepb'],

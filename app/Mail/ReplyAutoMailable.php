@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Helpers\Mail\MailTo;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -28,11 +29,8 @@ class ReplyAutoMailable extends Mailable
      */
     public function build()
     {
-         $mailFrom=config('plccnzone.admin_support_email');
-
-
         return $this->view('emails.replyAuto')
-                ->from($mailFrom,'plccnZone')
+                ->from(MailTo::SupportPlatform(),'plccnZone')
                 ->subject('reply::auto');
     }
 }
