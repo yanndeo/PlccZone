@@ -66,3 +66,6 @@ Route::get('/contact', function () {
 Route::get('/apropos', function () {
     return view('layouts/aboutus');
 })->name('aboutus');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
