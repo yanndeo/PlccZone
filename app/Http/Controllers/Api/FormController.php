@@ -6,6 +6,7 @@ use App\Http\Requests\DevisFormRequest;
 use App\Http\Requests\ContactRequest;
 use App\Mail\DevisMailable;
 use App\Mail\ContactMailable;
+use App\Mail\ReplyAutoMailable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -63,9 +64,8 @@ class FormController extends Controller
                    // ->cc('abdelmoula.nami@gmail.com')
                     ->send($messageData);
 
-            //Mail::to($request->email)
-              //  ->later($when, new ReplyAutoMessage);
-
+            Mail::to($request->email)
+                ->later($when, new ReplyAutoMailable);
 
             return response()->json('success', 200);    
 
