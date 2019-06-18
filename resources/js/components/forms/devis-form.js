@@ -8,7 +8,15 @@ import { ShowNotification } from "../utils/notification";
 import ReCaptchaComponent from "./reCaptcha";
 
 
-
+const dataInitial = {
+        namepb: "",
+        fullname: "",
+        entreprise: "",
+        email: "",
+        qte: "",
+        tel: "",
+        message: ""
+};
 
 class DevisForm extends Component {
 
@@ -101,7 +109,7 @@ class DevisForm extends Component {
         if(this.state.isloading){
 
              //Check if capctha is true and load
-            if (!this.state.isVerified) {
+            if (this.state.isVerified) {
 
                 const formData = this.state.formData;
                 console.log("state", formData);
@@ -111,15 +119,23 @@ class DevisForm extends Component {
                          console.log('to_front', response.status )
 
                         if(response.status === 200){
+
                             ShowNotification("success", "Message envoyé.Merci pour votre confiance ");
+                            this.setState({ formData : dataInitial})
                         }
 
                         if(response.status === 422){
                             
                             console.log('gestion_derreur', response.data.errors)
                             this.setState({ errors: response.data.errors })
-                        } 
-                        
+                        }
+
+
+                        if(response.status === 500){
+
+                            ShowNotification("warning", "Contactez l'administrateur ");
+                            this.setState({ formData : dataInitial})
+                        }
 
                 }).catch( (error)=>{
                     console.log('err_front', error)
@@ -304,7 +320,8 @@ class DevisForm extends Component {
 if (document.getElementById('devis_form')) {
     const elmtForm = document.getElementById("devis_form");
     const props = Object.assign({}, elmtForm.dataset);
-    console.log(props)
+    console.log(props) //value passer depuis la views html en dataset dans les props du component
+
     ReactDOM.render(
         <DevisForm {...props} />,
         document.getElementById("devis_form")

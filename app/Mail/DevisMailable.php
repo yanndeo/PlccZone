@@ -38,7 +38,7 @@ class DevisMailable extends Mailable
                
         $mailFrom=config('plccnzone.admin_support_email');
 
-           // dd($this->itemDevis['namepb']); 
+           // dd($this->itemDevis['namepb']);
         return 
             $this->view('emails.devis')
                  ->from($mailFrom,'PlccnZone')

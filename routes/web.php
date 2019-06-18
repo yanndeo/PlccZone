@@ -35,6 +35,9 @@ Route::namespace('Api')->group(function () {
 
     Route::post('/api/devis', 'FormController@devisProduct')->name('devis_product');
 
+    Route::post('/api/contact', 'FormController@contactPost')->name('contact_form');
+
+
     Route::get('/api/products', 'ProductController@loadProductApi');
 
     Route::get('/api/products/search/{item?}', 'ProductController@searchLike');

@@ -12,12 +12,12 @@
 
 
 @component('mail::table')
-# Infos complementaire
+# Infos complémentaires
 
 
 | Societe       | name         | email  |
-| ------------- |:-------------:| --------:|
-| {{ $society}} | {{ $name}}   |{{ $email}} |
+| ------------- |:-----------: | ------:|
+| Non Renseigné  | {{ $name}}   |{{ $email}} |
 @endcomponent
 
 @component('mail::button', ['url' => config('app.url'), 'color' => 'success'])

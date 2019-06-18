@@ -86,7 +86,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-                       aria-selected="false">Devis specifique</a>
+                       aria-selected="false">Dévis spécifique</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"

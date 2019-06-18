@@ -97,6 +97,28 @@ export const _ASKED_DEVIS = async(data) => {
 
 
 /**
+ * Simple request to contacPost action controller
+ */
+export const _SENDMAIL= async(data)=>{
+
+    try {
+        const response = await axios.post(`${API_END_POINT}contact`, data);
+
+        console.log('Rdata', response.status)
+
+        return response;
+
+    } catch (error) {
+        //error.response.data.errors;
+        console.log('error_asked_edvis', error.response.data)
+        let errors = error.response;
+
+        return errors;
+    }
+}
+
+
+/**
  * Le paramètre type d'une action est obligatoire alors que 
  * le paramètre value est optionnel. 
  * Selon l'action, la value n'est parfois pas nécessaire.

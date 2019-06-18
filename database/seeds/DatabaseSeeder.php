@@ -15,18 +15,18 @@ class DatabaseSeeder extends Seeder
 
 
 
-        $brands = factory(App\Models\Brand::class, 24)->create();
+      /*  $brands = factory(App\Models\Brand::class, 24)->create();
 
         $categories = factory(App\Models\Category::class, 8)->create();
 
-        $products = factory(App\Models\Product::class, 500)->create();
+        $products = factory(App\Models\Product::class, 500)->create();*/
 
 
 
 
 
 
-            /* $categories = \App\Models\Category::all();
+            $categories = \App\Models\Category::all();
              $brands = \App\Models\Brand::all();
 
              foreach ($categories as $category) {
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
                      'created_at' => Carbon::now()->format('Y-m-d H:i:s')
                  ]);
 
-             }*/
+             }
 
     }
 }

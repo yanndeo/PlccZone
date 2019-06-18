@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\DevisFormRequest;
+use App\Http\Requests\ContactRequest;
 use App\Mail\DevisMailable;
+use App\Mail\ContactMailable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -25,10 +27,9 @@ class FormController extends Controller
         $validated = $request->validated();
 
         if($validated){
-
             //SEND MAIL TO ADMIN
             Mail::to('yan2sambou@gmail.com')
-                 ->cc('abdelmoula.nami@gmail.com')
+                 //->cc('abdelmoula.nami@gmail.com')
                  ->send(new DevisMailable( $request->all() ));
 
             return response()->json(['success'=>true ], 200);
@@ -37,4 +38,49 @@ class FormController extends Controller
 
 
     }
+
+
+
+
+    public function contactPost( ContactRequest $request){
+
+        $validated = $request->validated();
+
+        if($validated){
+
+            //dd($request->all());
+
+            $when = now()->addMinutes(10);
+
+            $messageData = new ContactMailable(
+                            $request->name,
+                            $request->email,
+                            $request->message,
+                            $request->object 
+                        );
+
+            Mail::to('yan2sambou@gmail.com')
+                   // ->cc('abdelmoula.nami@gmail.com')
+                    ->send($messageData);
+
+            //Mail::to($request->email)
+              //  ->later($when, new ReplyAutoMessage);
+
+
+            return response()->json('success', 200);    
+
+        }    
+        
+    }
+
+
+
+
+
+
+
+
+
+
+    
 }

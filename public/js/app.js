@@ -83772,7 +83772,7 @@ module.exports = function(module) {
 /*!***************************************!*\
   !*** ./resources/js/actions/index.js ***!
   \***************************************/
-/*! exports provided: INIT_DATALIST, BRAND_SELECTED, CATEGORY_SELECTED, FAILURES_DATA, BRAND_LIST, CATEGORY_LIST, ASKED_DEVIS, _DATA_ARTICLES_INITIAL, _SELECTED_BRAND, _SELECTED_CATEGORY, _FAILURES_DATA_ARTICLES, _BRANDS, _CATEGORIES, _ASKED_DEVIS */
+/*! exports provided: INIT_DATALIST, BRAND_SELECTED, CATEGORY_SELECTED, FAILURES_DATA, BRAND_LIST, CATEGORY_LIST, ASKED_DEVIS, _DATA_ARTICLES_INITIAL, _SELECTED_BRAND, _SELECTED_CATEGORY, _FAILURES_DATA_ARTICLES, _BRANDS, _CATEGORIES, _ASKED_DEVIS, _SENDMAIL */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83791,6 +83791,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_BRANDS", function() { return _BRANDS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_CATEGORIES", function() { return _CATEGORIES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_ASKED_DEVIS", function() { return _ASKED_DEVIS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_SENDMAIL", function() { return _SENDMAIL; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_utils_uri__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/utils/uri */ "./resources/js/components/utils/uri.js");
@@ -83893,6 +83894,50 @@ function () {
   };
 }();
 /**
+ * Simple request to contacPost action controller
+ */
+
+var _SENDMAIL =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(data) {
+    var response, errors;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("".concat(_components_utils_uri__WEBPACK_IMPORTED_MODULE_1__["API_END_POINT"], "contact"), data);
+
+          case 3:
+            response = _context2.sent;
+            console.log('Rdata', response.status);
+            return _context2.abrupt("return", response);
+
+          case 8:
+            _context2.prev = 8;
+            _context2.t0 = _context2["catch"](0);
+            //error.response.data.errors;
+            console.log('error_asked_edvis', _context2.t0.response.data);
+            errors = _context2.t0.response;
+            return _context2.abrupt("return", errors);
+
+          case 13:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 8]]);
+  }));
+
+  return function _SENDMAIL(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+/**
  * Le paramètre type d'une action est obligatoire alors que 
  * le paramètre value est optionnel. 
  * Selon l'action, la value n'est parfois pas nécessaire.
@@ -83925,6 +83970,8 @@ __webpack_require__(/*! ./components/product/index */ "./resources/js/components
 __webpack_require__(/*! ./components/search/index */ "./resources/js/components/search/index.js");
 
 __webpack_require__(/*! ./components/forms/devis-form */ "./resources/js/components/forms/devis-form.js");
+
+__webpack_require__(/*! ./components/forms/contact-form */ "./resources/js/components/forms/contact-form.js");
 
 /***/ }),
 
@@ -83986,6 +84033,307 @@ if (token) {
 
 /***/ }),
 
+/***/ "./resources/js/components/forms/contact-form.js":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/forms/contact-form.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _reCaptcha__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./reCaptcha */ "./resources/js/components/forms/reCaptcha.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../actions */ "./resources/js/actions/index.js");
+/* harmony import */ var _utils_notification__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/notification */ "./resources/js/components/utils/notification.js");
+
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+ //Action
+
+ //Utils
+
+
+var dataInitial = {
+  name: '',
+  email: '',
+  subject: '',
+  message: ''
+};
+
+var ContactForm =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(ContactForm, _Component);
+
+  function ContactForm() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, ContactForm);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(ContactForm)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      formData: {
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      },
+      isloading: false,
+      isVerified: false,
+      errors: []
+      /**
+       * Send all datas using _ASKED_DEVIS() function 
+       * in actions file
+       */
+
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleSubmit",
+    /*#__PURE__*/
+    function () {
+      var _ref = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(e) {
+        var formData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                //Don't reload me page please
+                e.preventDefault(); // if (this.state.isloading) {
+                //Check if capctha is true and load
+                //   if (this.state.isVerified) {
+
+                formData = _this.state.formData;
+                console.log("state", formData);
+
+                Object(_actions__WEBPACK_IMPORTED_MODULE_4__["_SENDMAIL"])(formData).then(function (response) {
+                  console.log('to_front', response.status);
+
+                  if (response.status === 200) {
+                    Object(_utils_notification__WEBPACK_IMPORTED_MODULE_5__["ShowNotification"])("success", "Message envoyé.Merci pour votre confiance ");
+
+                    _this.setState({
+                      formData: dataInitial
+                    });
+                  }
+
+                  if (response.status === 422) {
+                    console.log('gestion_derreur', response.data.errors);
+
+                    _this.setState({
+                      errors: response.data.errors
+                    });
+                  }
+
+                  if (response.status === 500) {
+                    Object(_utils_notification__WEBPACK_IMPORTED_MODULE_5__["ShowNotification"])("warning", "Contactez l'administrateur ");
+
+                    _this.setState({
+                      formData: dataInitial
+                    });
+                  }
+                })["catch"](function (error) {
+                  console.log('err_front', error);
+                });
+                /*    } else {
+                       ShowNotification("error", "Please verify that you are a human!  ");
+                   }
+                } */
+
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }());
+
+    _defineProperty(_assertThisInitialized(_this), "handleOnloadCallback", function (recaptcha_loaded) {
+      console.log('recaptch-in-devis-form-loaded', recaptcha_loaded);
+
+      _this.setState({
+        isloading: recaptcha_loaded
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleVerifyCallback", function (recaptcha_value) {
+      console.log('recaptch-in-devis-form-verified', recaptcha_value);
+
+      _this.setState({
+        isVerified: recaptcha_value
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleFieldChange", function (e) {
+      _this.setState({
+        formData: _objectSpread({}, _this.state.formData, _defineProperty({}, e.target.name, e.target.value))
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "renderErrorAlert", function () {
+      if (_this.state.errors != '') {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          className: "alert alert-danger",
+          role: "alert"
+        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ol", null, "\u2023 Un ou plusieurs champs du formulaire ne sont pas correctement renseign\xE9s.")));
+      }
+    });
+
+    return _this;
+  }
+
+  _createClass(ContactForm, [{
+    key: "hasErrorFor",
+    value: function hasErrorFor(field) {
+      return !!this.state.errors[field];
+    }
+  }, {
+    key: "renderErrorFor",
+    value: function renderErrorFor(field) {
+      if (this.hasErrorFor(field)) {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+          className: "invalid-feedback"
+        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, this.state.errors[field][0]));
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var _this$state$formData = this.state.formData,
+          name = _this$state$formData.name,
+          email = _this$state$formData.email,
+          message = _this$state$formData.message,
+          subject = _this$state$formData.subject;
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, this.renderErrorAlert(), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
+        className: "row contact_form",
+        id: "contactForm",
+        noValidate: "novalidate",
+        onSubmit: function onSubmit(e) {
+          return _this2.handleSubmit(e);
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col-md-6"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        className: "form-control ".concat(this.hasErrorFor('name') ? 'is-invalid' : ''),
+        id: "name",
+        name: "name",
+        value: name,
+        onChange: function onChange(e) {
+          return _this2.handleFieldChange(e);
+        },
+        placeholder: "Entrer votre nom"
+      }), this.renderErrorFor('name')), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "email",
+        className: "form-control ".concat(this.hasErrorFor('email') ? 'is-invalid' : ''),
+        id: "email",
+        name: "email",
+        value: email,
+        onChange: function onChange(e) {
+          return _this2.handleFieldChange(e);
+        },
+        placeholder: "Entrer votre adresse mail"
+      }), this.renderErrorFor('email')), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        className: "form-control ".concat(this.hasErrorFor('subject') ? 'is-invalid' : ''),
+        id: "subject",
+        name: "subject",
+        value: subject,
+        onChange: function onChange(e) {
+          return _this2.handleFieldChange(e);
+        },
+        placeholder: " A quel sujet ?"
+      }), this.renderErrorFor('subject'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col-md-6"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("textarea", {
+        className: "form-control ".concat(this.hasErrorFor('message') ? 'is-invalid' : ''),
+        name: "message",
+        id: "message",
+        rows: "1",
+        cols: 54,
+        value: message,
+        onChange: function onChange(e) {
+          return _this2.handleFieldChange(e);
+        },
+        placeholder: "Votre message"
+      }), this.renderErrorFor('message'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col-md-12 text-right"
+      }, "\xA0\xA0 \xA0", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+        type: "submit",
+        value: "submit",
+        className: "primary-btn col-md-6 pull-rigth"
+      }, "ENVOYER"))));
+    }
+  }]);
+
+  return ContactForm;
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
+
+if (document.getElementById("contact_form")) {
+  react_dom__WEBPACK_IMPORTED_MODULE_2___default.a.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ContactForm, null), document.getElementById("contact_form"));
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (ContactForm);
+
+/***/ }),
+
 /***/ "./resources/js/components/forms/devis-form.js":
 /*!*****************************************************!*\
   !*** ./resources/js/components/forms/devis-form.js ***!
@@ -84040,6 +84388,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  //Components
 
 
+var dataInitial = {
+  namepb: "",
+  fullname: "",
+  entreprise: "",
+  email: "",
+  qte: "",
+  tel: "",
+  message: ""
+};
 
 var DevisForm =
 /*#__PURE__*/
@@ -84091,7 +84448,7 @@ function (_Component) {
 
                 if (_this.state.isloading) {
                   //Check if capctha is true and load
-                  if (!_this.state.isVerified) {
+                  if (_this.state.isVerified) {
                     formData = _this.state.formData;
                     console.log("state", formData);
 
@@ -84100,6 +84457,10 @@ function (_Component) {
 
                       if (response.status === 200) {
                         Object(_utils_notification__WEBPACK_IMPORTED_MODULE_4__["ShowNotification"])("success", "Message envoyé.Merci pour votre confiance ");
+
+                        _this.setState({
+                          formData: dataInitial
+                        });
                       }
 
                       if (response.status === 422) {
@@ -84107,6 +84468,14 @@ function (_Component) {
 
                         _this.setState({
                           errors: response.data.errors
+                        });
+                      }
+
+                      if (response.status === 500) {
+                        Object(_utils_notification__WEBPACK_IMPORTED_MODULE_4__["ShowNotification"])("warning", "Contactez l'administrateur ");
+
+                        _this.setState({
+                          formData: dataInitial
                         });
                       }
                     })["catch"](function (error) {
@@ -84317,7 +84686,8 @@ function (_Component) {
 if (document.getElementById('devis_form')) {
   var elmtForm = document.getElementById("devis_form");
   var props = Object.assign({}, elmtForm.dataset);
-  console.log(props);
+  console.log(props); //value passer depuis la views html en dataset dans les props du component
+
   react_dom__WEBPACK_IMPORTED_MODULE_2___default.a.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(DevisForm, props), document.getElementById("devis_form"));
 }
 
