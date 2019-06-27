@@ -85703,8 +85703,11 @@ var STYLELOADER = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RCAPTCHA_KEY_CLIENT", function() { return RCAPTCHA_KEY_CLIENT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RCAPTCHA_KEY_SERVER", function() { return RCAPTCHA_KEY_SERVER; });
+//FIRST:myadress
 var RCAPTCHA_KEY_CLIENT = "6LeK3acUAAAAAO5360ooM6gmArYECIJFSF-4KSnJ";
-var RCAPTCHA_KEY_SERVER = "6LeK3acUAAAAAIlOz88T-5NFwBOvouscMtEEUp6k";
+var RCAPTCHA_KEY_SERVER = "6LeK3acUAAAAAIlOz88T-5NFwBOvouscMtEEUp6k"; //SECOND:Platform
+//export const RCAPTCHA_KEY_CLIENT = "6Le2rqkUAAAAAE0vFGRKZdbwv57ok2E_YUdWEHwV"
+//export const RCAPTCHA_KEY_SERVER = "6Le2rqkUAAAAAEOVlSa_VZONYyF1wMkYb3d-wYhV"
 
 /***/ }),
 
@@ -85777,7 +85780,7 @@ var ShowNotification = function ShowNotification(type, text) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "API_END_POINT", function() { return API_END_POINT; });
-var API_END_POINT = "http://localhost:8000/api/"; //export const API_END_POINT= "http://www.plccnczone.com/api/"
+var API_END_POINT = "api/"; //export const API_END_POINT= "http://www.plccnczone.com/api/"
 
 /***/ }),
 

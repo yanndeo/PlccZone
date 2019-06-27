@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +12,13 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+
+
+if(App::environment('production')){
+    URL::forceScheme('https');
+}
 
 
 Route::namespace('Api')->group(function () {

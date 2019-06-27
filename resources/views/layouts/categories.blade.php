@@ -75,7 +75,7 @@
                                 <div class="product-details">
                                     <h6> {{$category->title}}</h6>
                                     <div class="prd-bottom">
-                                        <a href="{{ route('show_brands', ['slug'=>$category->slug, 'category'=>$category ]) }}" class="social-info">
+                                        <a href="{{ route('show_brands', ['slug'=>$category->slug, 'category'=>$category ]) }} " class="social-info">
                                             <span class="lnr lnr-move"></span>
                                             <p class="hover-text">VOIR PRODUIT</p>
                                         </a>
