@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,6 +59,17 @@ Route::namespace('Api')->group(function () {
 });
 
 
+/**
+ * Deconnection
+ */
+Route::get('/logout', function(){
+
+    Auth::logout();
+
+    return Redirect::to('login');
+})->name('logout');
+
+
 
 
 
@@ -75,6 +88,22 @@ Route::get('/contact', function () {
 Route::get('/apropos', function () {
     return view('layouts/aboutus');
 })->name('aboutus');
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+
+/*
+Desactive les routes register et reset pwd
+Auth::routes(['register'=>false, 'reset'=>false, 'verify'=>true ]);
+*/
+
+
+
+Auth::routes(['verify'=> true ]);
+
+
+Route::namespace('Admin')->group(function () {
+
+    Route::get('/admin', 'AdminController@index')->name('admin');
+});
+
+
