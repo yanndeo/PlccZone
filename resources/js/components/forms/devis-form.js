@@ -92,11 +92,6 @@ class DevisForm extends Component {
 
     
 
-
-
-
-
-
     /**
      * Send all datas using _ASKED_DEVIS() function 
      * in actions file

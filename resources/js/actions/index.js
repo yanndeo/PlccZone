@@ -23,21 +23,9 @@ export function _DATA_ARTICLES_INITIAL(articles) {
     };
 }
 
-export function _SELECTED_BRAND(brand){
 
-    return{
-        type: BRAND_SELECTED,
-        value: brand
-    }
-}
 
-export function _SELECTED_CATEGORY(category) {
 
-    return {
-        type: CATEGORY_SELECTED,
-        value: category
-    };
-}
 
 export function _FAILURES_DATA_ARTICLES(error) {
 
@@ -63,10 +51,82 @@ export function _CATEGORIES(categories) {
     };
 }
 
+/**
+ * Get all lists
+ */
+export const _GETALLDATALIST = () => async dispatch => {
+
+    
+    try {
+        const res = await axios.get(`${API_END_POINT}products`);
+        console.log('AllList', res.data)
+
+        dispatch({
+            type:BRAND_LIST,
+            value:res.data.brands
+        });
+        dispatch({
+            type: CATEGORY_LIST,
+            value: res.data.categories
+        });
+        dispatch({
+            type:INIT_DATALIST,
+            value: res.data.products
+        })
+       
+
+    } catch (error) {
+        console.log('get_all_list', error)
+    }
+
+}
 
 
 
+/**
+ * Select a brand
+ */
+export const _SELECTED_BRAND = brand => async dispatch=> {
 
+        try {
+            const res = await axios.get(`${API_END_POINT}fabricant/${brand}` )
+            //console.log(res.data.brand);
+
+             dispatch({ 
+                type: BRAND_SELECTED,
+                value: res.data.brand
+             })
+
+        } catch (error) {
+            console.log('brand_selected', error)
+
+        }
+
+        
+}
+
+
+/**
+ * Seclect category
+ */
+export const _SELECTED_CATEGORY = category=> async dispatch=> {
+
+    try {
+        const res = await axios.get(`${API_END_POINT}categorie/${category}`)
+        //console.log(res.data.category);
+
+        dispatch({ 
+            type: CATEGORY_SELECTED,
+            value: res.data.category
+         })
+
+    } catch (error) {
+        console.log('category_selected', error)
+
+    }
+
+    
+}
 
 
 /**

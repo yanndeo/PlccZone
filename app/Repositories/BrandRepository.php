@@ -84,7 +84,9 @@ class BrandRepository implements BrandInterface
      */
     public function showBrand($id)
     {
-        // TODO: Implement showBrand() method.
+        return $this->queryBuilderBrand()
+                    ->whereId($id)
+                    ->get();
     }
 
     /**

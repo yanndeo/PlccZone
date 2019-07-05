@@ -67,6 +67,19 @@ class BrandController extends Controller
 
 
 
+    /**
+     * Show details of brands
+     */
+    public function showDetails(Brand $brand)
+    {
+        //dd($brand);
+        return [
+            'brand'=> $brand
+        ];
+    }
+
+
+
 
 
 }

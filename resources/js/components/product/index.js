@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from "react-dom";
-
-
 // Import des Libs
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";

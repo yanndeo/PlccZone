@@ -31,11 +31,15 @@ Route::namespace('Api')->group(function () {
 
     Route::get('/categorie/{slug}_{category}', 'CategoryController@showBrands')->name('show_brands'); //ici
 
+    Route::get('/api/categorie/{category}' , 'CategoryController@showDetails')->name('show_details_category');
+
+
 
     Route::get('/fabricants', 'BrandController@index')->name('brand');
 
     Route::get('/fabricant/{slug}_{brand}', 'BrandController@showCategories')->name('show_categories');
 
+    Route::get('/api/fabricant/{brand}' , 'BrandController@showDetails')->name('show_details_brand');
 
     Route::get('/articles', 'ProductController@index')->name('articles');
 
@@ -90,7 +94,6 @@ Route::get('/apropos', function () {
 })->name('aboutus');
 
 
-
 /*
 Desactive les routes register et reset pwd
 Auth::routes(['register'=>false, 'reset'=>false, 'verify'=>true ]);
@@ -106,4 +109,9 @@ Route::namespace('Admin')->group(function () {
     Route::get('/admin', 'AdminController@index')->name('admin');
 });
 
+
+
+Route::get('/testeui', function (){
+    return view('dashboard/testui');
+})->name('testeui');
 

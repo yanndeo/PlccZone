@@ -6,7 +6,7 @@
                 <div class="d-flex flex-column m-auto">
                     <div class="stats-small__data text-center">
                         <span class="stats-small__label text-uppercase">Articles</span>
-                        <h6 class="stats-small__value count my-3">2,390</h6>
+                        <h6 class="stats-small__value count my-3">  {{ count($articles) }}</h6>
                     </div>
                     <div class="stats-small__data">
                         <span class="stats-small__percentage stats-small__percentage--increase">4.7%</span>
@@ -24,7 +24,7 @@
                 <div class="d-flex flex-column m-auto">
                     <div class="stats-small__data text-center">
                         <span class="stats-small__label text-uppercase">Brands</span>
-                        <h6 class="stats-small__value count my-3">182</h6>
+                        <h6 class="stats-small__value count my-3"> {{ count($brands) }} </h6>
                     </div>
                     <div class="stats-small__data">
                         <span class="stats-small__percentage stats-small__percentage--increase">12.4%</span>
@@ -42,7 +42,7 @@
                 <div class="d-flex flex-column m-auto">
                     <div class="stats-small__data text-center">
                         <span class="stats-small__label text-uppercase">Categories</span>
-                        <h6 class="stats-small__value count my-3">8,147</h6>
+                        <h6 class="stats-small__value count my-3"> {{ count($categories) }}</h6>
                     </div>
                     <div class="stats-small__data">
                         <span class="stats-small__percentage stats-small__percentage--decrease">3.8%</span>

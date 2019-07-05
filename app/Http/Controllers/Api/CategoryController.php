@@ -56,6 +56,8 @@ class CategoryController extends Controller
         return view();
     }
 
+
+
     /**
      * show list brands associate
      */
@@ -77,6 +79,14 @@ class CategoryController extends Controller
     }
 
 
+
+    public function showDetails(Category $category)
+    {
+        //dd($category);
+        return [
+            'category'=> $category
+        ];
+    }
 
 
 }

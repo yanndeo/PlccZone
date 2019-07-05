@@ -11,11 +11,16 @@ class CategoryRepository implements CategoryInterface
 {
 
 
-
+    /**
+     * @var Category
+     */
     private $category;
 
 
-
+    /**
+     * CategoryRepository constructor.
+     * @param Category $category
+     */
     public function __construct(Category $category )
     {
         $this->category = $category;

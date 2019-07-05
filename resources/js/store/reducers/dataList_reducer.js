@@ -10,6 +10,7 @@ let initialState = {
     initDataArticleList: [],
     currentDataArticleList: [],
     currentBrand: {},
+    currentCategory:{},
     error: null,
     isLoading: true
 };
@@ -18,7 +19,7 @@ let initialState = {
  function filterDataArticleList(state = initialState , action){
     let nextState
     
-    console.log('State_Globale1::',state);
+    //console.log('State_Globale1::',state);
 
     switch (action.type) {
 
@@ -35,7 +36,7 @@ let initialState = {
             return nextState = {
                 ...state,
                 currentDataArticleList: state.initDataArticleList.filter(item => item.brand_id === action.value.id),
-                currentBrand: action.value,
+                currentBrand: getDataBrandAfterFilter(action.value),
                 isLoading: false,
 
             }; 
@@ -44,6 +45,7 @@ let initialState = {
             return nextState = {
                 ...state,
                 currentDataArticleList: state.initDataArticleList.filter(item => item.category_id === action.value.id),
+                currentCategory: getDataCategoryAfterFilter(action.value) ,
                 isLoading: false,
 
             };
@@ -70,6 +72,37 @@ let initialState = {
 export default filterDataArticleList
 
 
+
+/**
+ * Filter what we want
+ * category
+ */
+function getDataCategoryAfterFilter(data) {
+    return {
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        articles_count: data.products_list,
+        avatar: data.avatar,
+        created_at: data.created_at
+    };
+}
+
+
+
+/**
+ * Filter what we want
+ * brand
+ */
+function getDataBrandAfterFilter(data) {
+    return {
+        id: data.id,
+        name: data.name,
+        comment: data.comment,
+        avatar: data.avatar,
+        created_at: data.created_at
+    };
+}
 
 
 

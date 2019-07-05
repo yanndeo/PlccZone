@@ -12,7 +12,7 @@ let initialState = {
 function listeBrandANDCategory(state = initialState, action) {
     let nextState
 
-    console.log('State_Globale2::', state);
+    //console.log('State_Globale2::', state);
 
     switch (action.type) {
 

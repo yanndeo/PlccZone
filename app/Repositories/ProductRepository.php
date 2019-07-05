@@ -10,8 +10,15 @@ use Illuminate\Database\Query\Builder;
 
 class ProductRepository implements ProductInterface
 {
+    /**
+     * @var Product
+     */
     private $product;
 
+    /**
+     * ProductRepository constructor.
+     * @param Product $product
+     */
     public function __construct(Product $product )
     {
         $this->product = $product;

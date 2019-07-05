@@ -13,11 +13,12 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-
 require('./components/product/index');
 require('./components/search/index');
 require('./components/forms/devis-form');
-require("./components/forms/contact-form");
+require('./components/forms/contact-form');
+require('./components/adminui/index');
+
 
 
 
