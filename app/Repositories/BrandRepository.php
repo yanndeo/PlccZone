@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Brand;
 use App\Repositories\contrats\BrandInterface;
+use Image;
 
 
 class BrandRepository implements BrandInterface
@@ -46,14 +47,29 @@ class BrandRepository implements BrandInterface
 
 
 
-
     /**
-     * @param array $data
-     * @return mixed
+     * 
      */
-    public function storedBrand(array $data)
+    public function store( $request)
     {
-        // TODO: Implement storedBrand() method.
+        $brand = new $this->brand();
+        
+        if($request->file){
+
+             $file = $request->file;
+             $filename =  time() .'.'.$file->getClientOriginalExtension();
+             \Intervention\Image\Facades\Image::make($file)->resize(263,290)->save(public_path('/uploads/brands/'.$filename));
+
+        }else{
+            $filename = 'default.jpg';
+
+        }
+
+        $brand->avatar = $filename;
+        $brand->name = $request->name;
+        $brand->comment = $request->comment;
+        $brand->save();
+
     }
 
 
@@ -88,6 +104,10 @@ class BrandRepository implements BrandInterface
                     ->whereId($id)
                     ->get();
     }
+
+
+
+
 
     /**
      * @return mixed

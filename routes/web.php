@@ -37,6 +37,7 @@ Route::namespace('Api')->group(function () {
 
     Route::get('/fabricants', 'BrandController@index')->name('brand');
 
+
     Route::get('/fabricant/{slug}_{brand}', 'BrandController@showCategories')->name('show_categories');
 
     Route::get('/api/fabricant/{brand}' , 'BrandController@showDetails')->name('show_details_brand');
@@ -60,7 +61,20 @@ Route::namespace('Api')->group(function () {
 
 
 
+
 });
+
+Route::namespace('Admin')->group(function () {
+
+    Route::post('/api/fabricants', 'BrandController@create')->name('brand_create');
+
+
+
+});
+
+
+
+
 
 
 /**

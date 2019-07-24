@@ -1,19 +1,37 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import {_CREATE_BRAND} from "../../actions/index";
+
+const iniState = {
+    edit: false,
+    checked: false,
+    selectedFile: null,
+    data: { name: '',comment: ''} 
+}
+
+
+
 
 class BrandForm extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            edit: false,
+            checked: false,
+           // selectedFile: null,
+            data: {
+                name: '',
+                comment: '',
+                selectedFile: null,
 
-
-    state = {
-        edit: false,
-        checked: false,
-        data: {
-            name: '',
-            comment: '',
-            imagePath: ''
-        }
+            }
+        };
     }
+
+
+
+   
 
 
     /**
@@ -23,7 +41,7 @@ class BrandForm extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentBrand !== this.props.currentBrand) {
 
-            let { name, comment, imagePath } = nextProps.currentBrand
+            let { name, comment } = nextProps.currentBrand
 
             this.setState({
                 edit: true,
@@ -32,7 +50,6 @@ class BrandForm extends Component {
                     ...this.state.data,
                     name,
                     comment,
-                    imagePath
                 }
             })
         }
@@ -44,25 +61,66 @@ class BrandForm extends Component {
 
     /**
      * Change value onChange
-     * this.state({ data:{...this.state.date, [XX]:YY } })
+     * this.state({ data:{...this.state.data, [XX]:YY } })
      */
     handleOnChange = e => {
         this.setState({
             data: {
                 ...this.state.data,
                 [e.target.name]: e.target.value
+                
             }
         })
+    }
+
+ 
+
+
+
+
+
+    /**
+     * SetState just for file input 
+     */
+    fileSelect = e => {
+       // this.setState({ selectedFile: e.target.files[0] })
+        this.setState({
+            data: {
+                ...this.state.data,
+                selectedFile: e.target.files[0]
+            }
+        });
+        console.log(e.target.files[0])
     }
 
 
 
     /**
-     * Dele this Cat 
+     * Sudmit data with action store
+     * to /api.
+     * we have to meth: onCreateBrand and onEditBrand
+     */
+    handleOnSubmit = e => {
+        e.preventDefault();
+
+        if (!this.state.edit) {
+
+            this.onCreateBrand()
+           
+        } else {
+            console.log("edit THIS br action");
+        }
+
+    }
+
+
+
+    /**
+     * Delete this Cat
      * when state edit/checked it true
      */
     handleDelete = e => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (this.state.checked) {
             console.log('Deleted action ')
@@ -72,31 +130,35 @@ class BrandForm extends Component {
     }
 
 
+
+
+
     /**
-     * Sudmit data with action store
-     * to /api
+     * Meth.
+     * onCreateBrand
      */
-    handleOnSubmit = e => {
-        e.preventDefault();
+    onCreateBrand(){
+        let { name, comment, selectedFile } = this.state.data;
+        const fd = new FormData();
+        selectedFile
+            ? fd.append('file', selectedFile, selectedFile.name)
+            : fd.append('file', '')
+        fd.append('name', name);
+        fd.append('comment', comment);
 
-        if (!this.state.edit) {
-            console.log('save new br action')
-        } else {
-            console.log("edit THIS br action");
+        //action redux: send data and clear form if successfully
+        this.props._CREATE_BRAND(fd).then((res) => {
+            if (res === 'success') {  this.setState(iniState) }
 
-        }
-
+        });
     }
-
-
-
 
 
 
 
     render() {
 
-        let { name, comment, imagePath } = this.state.data;
+        let { name, comment } = this.state.data;
 
         let classNameBtn = this.state.edit ? 'danger' : 'default'
 
@@ -104,24 +166,21 @@ class BrandForm extends Component {
 
         return (
             <div className="card card-small h-100">
-
                 <div className="card-header border-bottom">
                     <h6 className="m-0"> Formulaire fournisseur</h6>
                 </div>
-                
-                <div className="card-body d-flex flex-column">
 
-                    <form className="quick-post-form" onSubmit={ e=>this.handleOnSubmit(e)} >
+                <div className="card-body d-flex flex-column">
+                    <form className="quick-post-form" id="form-brand" onSubmit={e => this.handleOnSubmit(e)}>
 
                         <div className="form-group">
                             <input
                                 type="text"
                                 className="form-control"
-                                id="exampleInputEmail1"
                                 placeholder="Nom de l'equipementier "
                                 name="name"
                                 value={name}
-                                onChange={e => this.handleOnChange(e)} />
+                                onChange={ this.handleOnChange} />
                         </div>
 
                         <div className="form-group">
@@ -130,11 +189,16 @@ class BrandForm extends Component {
                                 placeholder="Description détaillée de l'equipementier"
                                 name="comment"
                                 value={comment}
-                                onChange={e => this.handleOnChange(e)} />
+                                onChange={this.handleOnChange}
+                            />
                         </div>
 
-                        <div className="form-group mb-0">
+                        <input type="file" onChange={this.fileSelect} />
 
+
+                        <div className="form-group" />
+
+                        <div className="form-group mb-0">
                             <button
                                 type="submit"
                                 className="btn btn-accent" >
@@ -147,10 +211,8 @@ class BrandForm extends Component {
                                 onClick={e => this.handleDelete(e)} >
                                 SUPPRIMER
                             </button>
-
                         </div>
                     </form>
-
                 </div>
             </div>
         );
@@ -167,4 +229,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default  connect(mapStateToProps, {})(BrandForm);
+export default  connect(mapStateToProps, {_CREATE_BRAND})(BrandForm);

@@ -9,7 +9,11 @@ export const BRAND_LIST = "BRAND_LIST";
 export const CATEGORY_LIST = "CATEGORY_LIST";
 export const ASKED_DEVIS = "ASKED_DEVIS";
 
+
 import axios from 'axios'
+
+
+
 
 
 //defini dans ce fichier et appeller dans App ;plutot que de le construire dans les components
@@ -50,6 +54,9 @@ export function _CATEGORIES(categories) {
         value: categories
     };
 }
+
+
+
 
 /**
  * Get all lists
@@ -127,6 +134,58 @@ export const _SELECTED_CATEGORY = category=> async dispatch=> {
 
     
 }
+
+
+
+
+/**
+ * Simple request without action redux
+ * to create brand (and image)
+ */
+
+export const _CREATE_BRAND = data => async dispatch=> {
+
+    console.log('DATA-entrant',data)
+
+    //const config = { headers: { 'Content-Type': 'multipart/form-data' } }
+
+    try {
+
+        const res = await axios.post(`${API_END_POINT}fabricants`, data)
+        console.log('data-sortant',res );
+           // call action redux to show message notif
+
+         /*   
+          dispatch({
+            type: CATEGORY_SELECTED,
+            value: res.data.category
+          }) 
+        */
+
+        return 'success'
+        document.getElementById('form-brand').reset(0); // clear input file
+    } catch(error) {
+        //error.response.data.errors;
+        console.log('error_save_brand', error.response.data.errors)
+        let errors = error.response.data.errors;
+
+        
+            Object.keys(errors).map((error, index) => (
+                console.log(errors[error][0] )
+            ))
+        
+        return errors;
+
+        // call action redux to show errors validation
+    }
+
+
+}
+
+
+
+
+
 
 
 /**

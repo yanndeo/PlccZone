@@ -10,7 +10,10 @@ use App\Mail\ReplyAutoMailable;
 class MailTo {
 
 
-
+    /**
+     * @param $mailable
+     * @return mixed
+     */
     public static function sendMailToAdmin($mailable)
     {
         $user_default = config('plccnzone.user_default');
@@ -22,7 +25,11 @@ class MailTo {
                 ->send($mailable);
     }
 
-
+    /**
+     * @param $userFrom
+     * @param $when
+     * @return mixed
+     */
     public static function ReplyAutoToUser($userFrom, $when)
     {
         return
@@ -30,7 +37,9 @@ class MailTo {
                 ->later($when, new ReplyAutoMailable);
     }
 
-
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
     public static function SupportPlatform()
     {
         $mailFrom= config('plccnzone.admin_support_email');

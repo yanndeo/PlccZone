@@ -83772,7 +83772,7 @@ module.exports = function(module) {
 /*!***************************************!*\
   !*** ./resources/js/actions/index.js ***!
   \***************************************/
-/*! exports provided: INIT_DATALIST, BRAND_SELECTED, CATEGORY_SELECTED, FAILURES_DATA, BRAND_LIST, CATEGORY_LIST, ASKED_DEVIS, _DATA_ARTICLES_INITIAL, _FAILURES_DATA_ARTICLES, _BRANDS, _CATEGORIES, _GETALLDATALIST, _SELECTED_BRAND, _SELECTED_CATEGORY, _ASKED_DEVIS, _SENDMAIL */
+/*! exports provided: INIT_DATALIST, BRAND_SELECTED, CATEGORY_SELECTED, FAILURES_DATA, BRAND_LIST, CATEGORY_LIST, ASKED_DEVIS, _DATA_ARTICLES_INITIAL, _FAILURES_DATA_ARTICLES, _BRANDS, _CATEGORIES, _GETALLDATALIST, _SELECTED_BRAND, _SELECTED_CATEGORY, _CREATE_BRAND, _ASKED_DEVIS, _SENDMAIL */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83791,6 +83791,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_GETALLDATALIST", function() { return _GETALLDATALIST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_SELECTED_BRAND", function() { return _SELECTED_BRAND; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_SELECTED_CATEGORY", function() { return _SELECTED_CATEGORY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_CREATE_BRAND", function() { return _CREATE_BRAND; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_ASKED_DEVIS", function() { return _ASKED_DEVIS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_SENDMAIL", function() { return _SENDMAIL; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
@@ -83995,53 +83996,70 @@ var _SELECTED_CATEGORY = function _SELECTED_CATEGORY(category) {
 };
 /**
  * Simple request without action redux
+ * to create brand (and image)
+ */
+
+var _CREATE_BRAND = function _CREATE_BRAND(data) {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref4 = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(dispatch) {
+        var res, errors;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                console.log('DATA-entrant', data); //const config = { headers: { 'Content-Type': 'multipart/form-data' } }
+
+                _context4.prev = 1;
+                _context4.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("".concat(_components_utils_uri__WEBPACK_IMPORTED_MODULE_1__["API_END_POINT"], "fabricants"), data);
+
+              case 4:
+                res = _context4.sent;
+                console.log('data-sortant', res); // call action redux to show message notif
+
+                /*   
+                 dispatch({
+                   type: CATEGORY_SELECTED,
+                   value: res.data.category
+                 }) 
+                */
+
+                return _context4.abrupt("return", 'success');
+
+              case 10:
+                _context4.prev = 10;
+                _context4.t0 = _context4["catch"](1);
+                //error.response.data.errors;
+                console.log('error_save_brand', _context4.t0.response.data.errors);
+                errors = _context4.t0.response.data.errors;
+                Object.keys(errors).map(function (error, index) {
+                  return console.log(errors[error][0]);
+                });
+                return _context4.abrupt("return", errors);
+
+              case 16:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[1, 10]]);
+      }));
+
+      return function (_x4) {
+        return _ref4.apply(this, arguments);
+      };
+    }()
+  );
+};
+/**
+ * Simple request without action redux
  */
 
 var _ASKED_DEVIS =
-/*#__PURE__*/
-function () {
-  var _ref4 = _asyncToGenerator(
-  /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(data) {
-    var response, errors;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            _context4.prev = 0;
-            _context4.next = 3;
-            return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("".concat(_components_utils_uri__WEBPACK_IMPORTED_MODULE_1__["API_END_POINT"], "devis"), data);
-
-          case 3:
-            response = _context4.sent;
-            console.log('Rdata', response.status);
-            return _context4.abrupt("return", response);
-
-          case 8:
-            _context4.prev = 8;
-            _context4.t0 = _context4["catch"](0);
-            //error.response.data.errors;
-            console.log('error_asked_edvis', _context4.t0.response.data);
-            errors = _context4.t0.response;
-            return _context4.abrupt("return", errors);
-
-          case 13:
-          case "end":
-            return _context4.stop();
-        }
-      }
-    }, _callee4, null, [[0, 8]]);
-  }));
-
-  return function _ASKED_DEVIS(_x4) {
-    return _ref4.apply(this, arguments);
-  };
-}();
-/**
- * Simple request to contacPost action controller
- */
-
-var _SENDMAIL =
 /*#__PURE__*/
 function () {
   var _ref5 = _asyncToGenerator(
@@ -84054,7 +84072,7 @@ function () {
           case 0:
             _context5.prev = 0;
             _context5.next = 3;
-            return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("".concat(_components_utils_uri__WEBPACK_IMPORTED_MODULE_1__["API_END_POINT"], "contact"), data);
+            return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("".concat(_components_utils_uri__WEBPACK_IMPORTED_MODULE_1__["API_END_POINT"], "devis"), data);
 
           case 3:
             response = _context5.sent;
@@ -84077,8 +84095,52 @@ function () {
     }, _callee5, null, [[0, 8]]);
   }));
 
-  return function _SENDMAIL(_x5) {
+  return function _ASKED_DEVIS(_x5) {
     return _ref5.apply(this, arguments);
+  };
+}();
+/**
+ * Simple request to contacPost action controller
+ */
+
+var _SENDMAIL =
+/*#__PURE__*/
+function () {
+  var _ref6 = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(data) {
+    var response, errors;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.prev = 0;
+            _context6.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("".concat(_components_utils_uri__WEBPACK_IMPORTED_MODULE_1__["API_END_POINT"], "contact"), data);
+
+          case 3:
+            response = _context6.sent;
+            console.log('Rdata', response.status);
+            return _context6.abrupt("return", response);
+
+          case 8:
+            _context6.prev = 8;
+            _context6.t0 = _context6["catch"](0);
+            //error.response.data.errors;
+            console.log('error_asked_edvis', _context6.t0.response.data);
+            errors = _context6.t0.response;
+            return _context6.abrupt("return", errors);
+
+          case 13:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6, null, [[0, 8]]);
+  }));
+
+  return function _SENDMAIL(_x6) {
+    return _ref6.apply(this, arguments);
   };
 }();
 /**
@@ -84191,6 +84253,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions/index */ "./resources/js/actions/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
@@ -84216,43 +84279,53 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+var iniState = {
+  edit: false,
+  checked: false,
+  selectedFile: null,
+  data: {
+    name: '',
+    comment: ''
+  }
+};
+
 var BrandForm =
 /*#__PURE__*/
 function (_Component) {
   _inherits(BrandForm, _Component);
 
-  function BrandForm() {
-    var _getPrototypeOf2;
-
+  function BrandForm(props) {
     var _this;
 
     _classCallCheck(this, BrandForm);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(BrandForm)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-    _defineProperty(_assertThisInitialized(_this), "state", {
-      edit: false,
-      checked: false,
-      data: {
-        name: '',
-        comment: '',
-        imagePath: ''
-      }
-      /**
-       * When component receive props 
-       * we set the state
-       */
-
-    });
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(BrandForm).call(this, props));
 
     _defineProperty(_assertThisInitialized(_this), "handleOnChange", function (e) {
       _this.setState({
         data: _objectSpread({}, _this.state.data, _defineProperty({}, e.target.name, e.target.value))
       });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "fileSelect", function (e) {
+      // this.setState({ selectedFile: e.target.files[0] })
+      _this.setState({
+        data: _objectSpread({}, _this.state.data, {
+          selectedFile: e.target.files[0]
+        })
+      });
+
+      console.log(e.target.files[0]);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleOnSubmit", function (e) {
+      e.preventDefault();
+
+      if (!_this.state.edit) {
+        _this.onCreateBrand();
+      } else {
+        console.log("edit THIS br action");
+      }
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleDelete", function (e) {
@@ -84264,18 +84337,23 @@ function (_Component) {
       }
     });
 
-    _defineProperty(_assertThisInitialized(_this), "handleOnSubmit", function (e) {
-      e.preventDefault();
-
-      if (!_this.state.edit) {
-        console.log('save new br action');
-      } else {
-        console.log("edit THIS br action");
+    _this.state = {
+      edit: false,
+      checked: false,
+      // selectedFile: null,
+      data: {
+        name: '',
+        comment: '',
+        selectedFile: null
       }
-    });
-
+    };
     return _this;
   }
+  /**
+   * When component receive props 
+   * we set the state
+   */
+
 
   _createClass(BrandForm, [{
     key: "componentWillReceiveProps",
@@ -84283,33 +84361,55 @@ function (_Component) {
       if (nextProps.currentBrand !== this.props.currentBrand) {
         var _nextProps$currentBra = nextProps.currentBrand,
             name = _nextProps$currentBra.name,
-            comment = _nextProps$currentBra.comment,
-            imagePath = _nextProps$currentBra.imagePath;
+            comment = _nextProps$currentBra.comment;
         this.setState({
           edit: true,
           checked: true,
           data: _objectSpread({}, this.state.data, {
             name: name,
-            comment: comment,
-            imagePath: imagePath
+            comment: comment
           })
         });
       }
     }
     /**
      * Change value onChange
-     * this.state({ data:{...this.state.date, [XX]:YY } })
+     * this.state({ data:{...this.state.data, [XX]:YY } })
      */
 
   }, {
-    key: "render",
-    value: function render() {
+    key: "onCreateBrand",
+
+    /**
+     * Meth.
+     * onCreateBrand
+     */
+    value: function onCreateBrand() {
       var _this2 = this;
 
       var _this$state$data = this.state.data,
           name = _this$state$data.name,
           comment = _this$state$data.comment,
-          imagePath = _this$state$data.imagePath;
+          selectedFile = _this$state$data.selectedFile;
+      var fd = new FormData();
+      selectedFile ? fd.append('file', selectedFile, selectedFile.name) : fd.append('file', '');
+      fd.append('name', name);
+      fd.append('comment', comment); //action redux: send data and clear form if successfully
+
+      this.props._CREATE_BRAND(fd).then(function (res) {
+        if (res === 'success') {
+          _this2.setState(iniState);
+        }
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var _this$state$data2 = this.state.data,
+          name = _this$state$data2.name,
+          comment = _this$state$data2.comment;
       var classNameBtn = this.state.edit ? 'danger' : 'default';
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card card-small h-100"
@@ -84321,21 +84421,19 @@ function (_Component) {
         className: "card-body d-flex flex-column"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         className: "quick-post-form",
+        id: "form-brand",
         onSubmit: function onSubmit(e) {
-          return _this2.handleOnSubmit(e);
+          return _this3.handleOnSubmit(e);
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
         className: "form-control",
-        id: "exampleInputEmail1",
         placeholder: "Nom de l'equipementier ",
         name: "name",
         value: name,
-        onChange: function onChange(e) {
-          return _this2.handleOnChange(e);
-        }
+        onChange: this.handleOnChange
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
@@ -84343,10 +84441,13 @@ function (_Component) {
         placeholder: "Description d\xE9taill\xE9e de l'equipementier",
         name: "comment",
         value: comment,
-        onChange: function onChange(e) {
-          return _this2.handleOnChange(e);
-        }
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        onChange: this.handleOnChange
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "file",
+        onChange: this.fileSelect
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group mb-0"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit",
@@ -84355,7 +84456,7 @@ function (_Component) {
         type: "submit",
         className: "btn btn-".concat(classNameBtn, " float-right "),
         onClick: function onClick(e) {
-          return _this2.handleDelete(e);
+          return _this3.handleDelete(e);
         }
       }, "SUPPRIMER")))));
     }
@@ -84375,7 +84476,9 @@ var mapStateToProps = function mapStateToProps(state) {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(BrandForm));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
+  _CREATE_BRAND: _actions_index__WEBPACK_IMPORTED_MODULE_2__["_CREATE_BRAND"]
+})(BrandForm));
 
 /***/ }),
 

@@ -44,10 +44,19 @@
 
             <li class="nav-item">
                 <a class="nav-link " href="user-profile-lite.html">
-                    <i class="material-icons">person</i>
-                    <span>User Info </span>
+                    <i class="material-icons">settings</i>
+                    <span>Import  </span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link " href="user-profile-lite.html">
+                    <i class="material-icons">person</i>
+                    <span>User Info & Account </span>
+                </a>
+            </li>
+
+
         </ul>
     </div>
 </aside>

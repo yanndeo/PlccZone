@@ -4,7 +4,7 @@ interface BrandInterface
 {
     public function allBrands();
 
-    public function storedBrand(array $data);
+    public function store( $data);
 
     public function updatedBrand(array $data, $id);
 
