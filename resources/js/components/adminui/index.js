@@ -11,14 +11,17 @@ import CategoryForm from "./category-form";
 import BrandForm from './brand-form';
 import CategoryList from './category-list';
 import { _GETALLDATALIST } from "../../actions";
+import AlertMessage from '../utils/alertMessage';
 
 
  class Index extends Component {
 
 
+    /**
+     * After mounting
+     */
      componentDidMount(){
          STORE.dispatch(_GETALLDATALIST())
-
 
      }
 
@@ -26,28 +29,24 @@ import { _GETALLDATALIST } from "../../actions";
     render() {
         return (
             <Fragment>
+
+                <AlertMessage/>
+
                 <div className="col-lg-9 col-md-12 col-sm-12 mb-4">
-
-                     <DataTable/>
+                    <DataTable />
                 </div>
-
                 <div className="col-lg-3 col-md-12 col-sm-12 mb-4">
-                    <BrandList/>
+                    <BrandList />
                 </div>
-
                 <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
-                    <CategoryForm/>
+                    <CategoryForm />
                 </div>
-
                 <div className="col-lg-5 col-md-6 col-sm-12 mb-4">
-                     <BrandForm/>
+                    <BrandForm />
                 </div>
-
                 <div className="col-lg-3 col-md-12 col-sm-12 mb-4 ">
-                     <CategoryList/>
+                    <CategoryList />
                 </div>
-
-
             </Fragment>
         );
     }
@@ -58,7 +57,6 @@ if (document.getElementById("main-admin-ui")){
 
     ReactDOM.render(
         <Provider store={STORE}>
-            
             <Index />
         </Provider>,
         document.getElementById("main-admin-ui")

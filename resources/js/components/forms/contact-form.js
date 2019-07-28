@@ -1,12 +1,23 @@
 import React, {Component, Fragment} from 'react';
 import ReactDOM from "react-dom";
-import ReCaptchaComponent from './reCaptcha';
+import ReCaptchaComponent from "./reCaptcha";
+
+//Redux
+import { Provider } from "react-redux";
+import STORE from "../../store/configureStore";
 //Action
-import { _SENDMAIL } from "../../actions";
+import { _SENDMAIL } from "../../actions/index";
 //Utils
-import { ShowNotification } from "../utils/notification";
+import AlertMessage from "../utils/alertMessage";
+import { _setAlert } from '../../actions/alert';
 
 
+
+/**
+ * Init state
+ * call when we want 
+ * clear form contact
+ */
 const dataInitial = {
     name:'',
     email:'',
@@ -25,8 +36,6 @@ class ContactForm extends Component {
                 subject: '',
                 message: '',
             },
-
-
             isloading: false,
             isVerified: false,
             errors: [],
@@ -36,42 +45,31 @@ class ContactForm extends Component {
 
 
     /**
-     * Send all datas using _ASKED_DEVIS() function 
-     * in actions file
+     * Send all datas using _SENDMAIL()  
+     * from store redux
+     * and show errors laravel 422
+     * in form
      */
     handleSubmit = async (e) => {
 
         //Don't reload me page please
         e.preventDefault();
 
-       // if (this.state.isloading) {
+       if (this.state.isloading) {
 
             //Check if capctha is true and load
-         //   if (this.state.isVerified) {
+            if (this.state.isVerified) {
 
                 const formData = this.state.formData;
                 console.log("state", formData);
 
-                        _SENDMAIL(formData)
-                                .then(response => {
-                                 console.log('to_front', response.status)
-
-                                    if (response.status === 200) {
-
-                                        ShowNotification("success", "Message envoyé.Merci pour votre confiance ");
-                                        this.setState({ formData: dataInitial })
-                                    }
-
+                           STORE.dispatch(_SENDMAIL(formData))
+                                .then(response => {   
+                                    console.log('gestion_derreur', response)
+      
                                     if (response.status === 422) {
-
-                                        console.log('gestion_derreur', response.data.errors)
                                         this.setState({ errors: response.data.errors })
-                                    }
-
-
-                                    if (response.status === 500) {
-
-                                        ShowNotification("warning", "Contactez l'administrateur ");
+                                    }else{
                                         this.setState({ formData: dataInitial })
                                     }
 
@@ -82,21 +80,20 @@ class ContactForm extends Component {
 
 
 
-         /*    } else {
-                ShowNotification("error", "Please verify that you are a human!  ");
+             } else {
+                STORE.dispatch(_setAlert("Please verify that you are a human!","warning"))
             }
-        } */
+        } 
 
 
     };
 
 
 
-   /**
+  /**
    *  handleVerifyCallback & handleOnloadCallback
    *  Callback function
    */
-
     handleOnloadCallback = (recaptcha_loaded) => {
         console.log('recaptch-in-devis-form-loaded', recaptcha_loaded)
 
@@ -112,7 +109,7 @@ class ContactForm extends Component {
 
 
     
-     /**
+    /**
      * Change value of state 
      * when we are filling form's fields
      */
@@ -126,11 +123,11 @@ class ContactForm extends Component {
     };
 
 
-    /**
-      * 
-      * Gestion d'erreurs
-      */
+   /**
+    * Gestion d'erreurs
+    */
     renderErrorAlert = () => {
+        
         if (this.state.errors != '') {
             return (
                 <div className="alert alert-danger" role="alert">
@@ -144,9 +141,15 @@ class ContactForm extends Component {
         }
     }
 
+
+
+    
     hasErrorFor(field) {
         return !!this.state.errors[field]
     }
+
+
+
 
     renderErrorFor(field) {
         if (this.hasErrorFor(field)) {
@@ -163,18 +166,20 @@ class ContactForm extends Component {
     render() {
 
         const { name, email, message, subject } = this.state.formData ;
+
         return (
 
             <Fragment>
-                {this.renderErrorAlert()}
+
+            { this.renderErrorAlert() }
 
 
             <form
                 className="row contact_form"
                 id="contactForm"
                 noValidate="novalidate"
-                onSubmit={ e=> this.handleSubmit(e)}
-            >
+                onSubmit={ e=> this.handleSubmit(e)} >
+
                 <div className="col-md-6">
                     <div className="form-group">
                         <input
@@ -184,8 +189,7 @@ class ContactForm extends Component {
                             name="name"
                             value={name}
                             onChange={e => this.handleFieldChange(e)}
-                            placeholder="Entrer votre nom"
-                        />
+                            placeholder="Entrer votre nom" />
                         {this.renderErrorFor('name')}
 
                     </div>
@@ -198,8 +202,7 @@ class ContactForm extends Component {
                             name="email"
                             value={email}
                             onChange={e => this.handleFieldChange(e)}
-                            placeholder="Entrer votre adresse mail"
-                        />
+                            placeholder="Entrer votre adresse mail"/>
                         {this.renderErrorFor('email')}
 
                     </div>
@@ -212,8 +215,7 @@ class ContactForm extends Component {
                             name="subject"
                             value={subject}
                             onChange={e => this.handleFieldChange(e)}
-                            placeholder=" A quel sujet ?"
-                        />
+                            placeholder=" A quel sujet ?"/>
                         {this.renderErrorFor('subject')}
 
                     </div>
@@ -229,28 +231,29 @@ class ContactForm extends Component {
                             cols={54}
                             value={message}
                             onChange={e => this.handleFieldChange(e)}
-                            placeholder="Votre message"
-                        />
+                            placeholder="Votre message" />
                         {this.renderErrorFor('message')}
 
                     </div>
                 </div>
 
                 <div className="col-md-12 text-right">
-                  {/*   <ReCaptchaComponent
+                       <ReCaptchaComponent
                         handleOnloadCallback={this.handleOnloadCallback}
-                        handleVerifyCallback={this.handleVerifyCallback}
-                    /> */}
-                    &nbsp;&nbsp; &nbsp;
-                    <button
-                        type="submit"
-                        value="submit"
-                        className="primary-btn col-md-6 pull-rigth"
-                    >
-                        ENVOYER
-                    </button>
+                        handleVerifyCallback={this.handleVerifyCallback} /> 
+                        &nbsp;&nbsp; &nbsp;
+                        <button 
+                            type="submit" 
+                            value="submit"
+                            className="primary-btn col-md-6 pull-rigth"
+                            style={{ marginTop: -112, width: 394 }}
+                            >
+                            ENVOYER
+                        </button>
                 </div>
+
             </form>
+                <AlertMessage />
 
 
             </Fragment>
@@ -261,8 +264,15 @@ class ContactForm extends Component {
 
 
 if (document.getElementById("contact_form")) {
-    ReactDOM.render(<ContactForm />, document.getElementById("contact_form"));
-}
 
+    console.log("STORE:", STORE.dispatch(_SENDMAIL()));
+
+    ReactDOM.render(
+        <Provider store={STORE}>
+            <ContactForm />
+        </Provider>,
+        document.getElementById("contact_form")
+    );
+}
 
 export default ContactForm;

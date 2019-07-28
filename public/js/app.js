@@ -83569,6 +83569,265 @@ function symbolObservablePonyfill(root) {
 
 /***/ }),
 
+/***/ "./node_modules/uuid/index.js":
+/*!************************************!*\
+  !*** ./node_modules/uuid/index.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var v1 = __webpack_require__(/*! ./v1 */ "./node_modules/uuid/v1.js");
+var v4 = __webpack_require__(/*! ./v4 */ "./node_modules/uuid/v4.js");
+
+var uuid = v4;
+uuid.v1 = v1;
+uuid.v4 = v4;
+
+module.exports = uuid;
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/lib/bytesToUuid.js":
+/*!**********************************************!*\
+  !*** ./node_modules/uuid/lib/bytesToUuid.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+var byteToHex = [];
+for (var i = 0; i < 256; ++i) {
+  byteToHex[i] = (i + 0x100).toString(16).substr(1);
+}
+
+function bytesToUuid(buf, offset) {
+  var i = offset || 0;
+  var bth = byteToHex;
+  // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
+  return ([bth[buf[i++]], bth[buf[i++]], 
+	bth[buf[i++]], bth[buf[i++]], '-',
+	bth[buf[i++]], bth[buf[i++]], '-',
+	bth[buf[i++]], bth[buf[i++]], '-',
+	bth[buf[i++]], bth[buf[i++]], '-',
+	bth[buf[i++]], bth[buf[i++]],
+	bth[buf[i++]], bth[buf[i++]],
+	bth[buf[i++]], bth[buf[i++]]]).join('');
+}
+
+module.exports = bytesToUuid;
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/lib/rng-browser.js":
+/*!**********************************************!*\
+  !*** ./node_modules/uuid/lib/rng-browser.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// Unique ID creation requires a high quality random # generator.  In the
+// browser this is a little complicated due to unknown quality of Math.random()
+// and inconsistent support for the `crypto` API.  We do the best we can via
+// feature-detection
+
+// getRandomValues needs to be invoked in a context where "this" is a Crypto
+// implementation. Also, find the complete implementation of crypto on IE11.
+var getRandomValues = (typeof(crypto) != 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto)) ||
+                      (typeof(msCrypto) != 'undefined' && typeof window.msCrypto.getRandomValues == 'function' && msCrypto.getRandomValues.bind(msCrypto));
+
+if (getRandomValues) {
+  // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
+  var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
+
+  module.exports = function whatwgRNG() {
+    getRandomValues(rnds8);
+    return rnds8;
+  };
+} else {
+  // Math.random()-based (RNG)
+  //
+  // If all else fails, use Math.random().  It's fast, but is of unspecified
+  // quality.
+  var rnds = new Array(16);
+
+  module.exports = function mathRNG() {
+    for (var i = 0, r; i < 16; i++) {
+      if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
+      rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
+    }
+
+    return rnds;
+  };
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/v1.js":
+/*!*********************************!*\
+  !*** ./node_modules/uuid/v1.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var rng = __webpack_require__(/*! ./lib/rng */ "./node_modules/uuid/lib/rng-browser.js");
+var bytesToUuid = __webpack_require__(/*! ./lib/bytesToUuid */ "./node_modules/uuid/lib/bytesToUuid.js");
+
+// **`v1()` - Generate time-based UUID**
+//
+// Inspired by https://github.com/LiosK/UUID.js
+// and http://docs.python.org/library/uuid.html
+
+var _nodeId;
+var _clockseq;
+
+// Previous uuid creation time
+var _lastMSecs = 0;
+var _lastNSecs = 0;
+
+// See https://github.com/broofa/node-uuid for API details
+function v1(options, buf, offset) {
+  var i = buf && offset || 0;
+  var b = buf || [];
+
+  options = options || {};
+  var node = options.node || _nodeId;
+  var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
+
+  // node and clockseq need to be initialized to random values if they're not
+  // specified.  We do this lazily to minimize issues related to insufficient
+  // system entropy.  See #189
+  if (node == null || clockseq == null) {
+    var seedBytes = rng();
+    if (node == null) {
+      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+      node = _nodeId = [
+        seedBytes[0] | 0x01,
+        seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]
+      ];
+    }
+    if (clockseq == null) {
+      // Per 4.2.2, randomize (14 bit) clockseq
+      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
+    }
+  }
+
+  // UUID timestamps are 100 nano-second units since the Gregorian epoch,
+  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
+  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
+  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
+  var msecs = options.msecs !== undefined ? options.msecs : new Date().getTime();
+
+  // Per 4.2.1.2, use count of uuid's generated during the current clock
+  // cycle to simulate higher resolution clock
+  var nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1;
+
+  // Time since last uuid creation (in msecs)
+  var dt = (msecs - _lastMSecs) + (nsecs - _lastNSecs)/10000;
+
+  // Per 4.2.1.2, Bump clockseq on clock regression
+  if (dt < 0 && options.clockseq === undefined) {
+    clockseq = clockseq + 1 & 0x3fff;
+  }
+
+  // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
+  // time interval
+  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
+    nsecs = 0;
+  }
+
+  // Per 4.2.1.2 Throw error if too many uuids are requested
+  if (nsecs >= 10000) {
+    throw new Error('uuid.v1(): Can\'t create more than 10M uuids/sec');
+  }
+
+  _lastMSecs = msecs;
+  _lastNSecs = nsecs;
+  _clockseq = clockseq;
+
+  // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
+  msecs += 12219292800000;
+
+  // `time_low`
+  var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
+  b[i++] = tl >>> 24 & 0xff;
+  b[i++] = tl >>> 16 & 0xff;
+  b[i++] = tl >>> 8 & 0xff;
+  b[i++] = tl & 0xff;
+
+  // `time_mid`
+  var tmh = (msecs / 0x100000000 * 10000) & 0xfffffff;
+  b[i++] = tmh >>> 8 & 0xff;
+  b[i++] = tmh & 0xff;
+
+  // `time_high_and_version`
+  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
+  b[i++] = tmh >>> 16 & 0xff;
+
+  // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
+  b[i++] = clockseq >>> 8 | 0x80;
+
+  // `clock_seq_low`
+  b[i++] = clockseq & 0xff;
+
+  // `node`
+  for (var n = 0; n < 6; ++n) {
+    b[i + n] = node[n];
+  }
+
+  return buf ? buf : bytesToUuid(b);
+}
+
+module.exports = v1;
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/v4.js":
+/*!*********************************!*\
+  !*** ./node_modules/uuid/v4.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var rng = __webpack_require__(/*! ./lib/rng */ "./node_modules/uuid/lib/rng-browser.js");
+var bytesToUuid = __webpack_require__(/*! ./lib/bytesToUuid */ "./node_modules/uuid/lib/bytesToUuid.js");
+
+function v4(options, buf, offset) {
+  var i = buf && offset || 0;
+
+  if (typeof(options) == 'string') {
+    buf = options === 'binary' ? new Array(16) : null;
+    options = null;
+  }
+  options = options || {};
+
+  var rnds = options.random || (options.rng || rng)();
+
+  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+  rnds[6] = (rnds[6] & 0x0f) | 0x40;
+  rnds[8] = (rnds[8] & 0x3f) | 0x80;
+
+  // Copy bytes to buffer, if provided
+  if (buf) {
+    for (var ii = 0; ii < 16; ++ii) {
+      buf[i + ii] = rnds[ii];
+    }
+  }
+
+  return buf || bytesToUuid(rnds);
+}
+
+module.exports = v4;
+
+
+/***/ }),
+
 /***/ "./node_modules/warning/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/warning/browser.js ***!
@@ -83768,6 +84027,45 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/js/actions/alert.js":
+/*!***************************************!*\
+  !*** ./resources/js/actions/alert.js ***!
+  \***************************************/
+/*! exports provided: _setAlert */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_setAlert", function() { return _setAlert; });
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(uuid__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./types */ "./resources/js/actions/types.js");
+
+ //defini dans ce fichier et appeller dans App ;plutot que de le construire dans les components
+
+var _setAlert = function _setAlert(msg, alertType) {
+  var timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 16000;
+  return function (dispatch) {
+    var id = uuid__WEBPACK_IMPORTED_MODULE_0___default.a.v4();
+    dispatch({
+      type: _types__WEBPACK_IMPORTED_MODULE_1__["SET_ALERT"],
+      payload: {
+        msg: msg,
+        alertType: alertType,
+        id: id
+      }
+    });
+    setTimeout(function () {
+      return dispatch({
+        type: _types__WEBPACK_IMPORTED_MODULE_1__["REMOVE_ALERT"],
+        payload: id
+      });
+    }, timeout);
+  };
+};
+
+/***/ }),
+
 /***/ "./resources/js/actions/index.js":
 /*!***************************************!*\
   !*** ./resources/js/actions/index.js ***!
@@ -83799,7 +84097,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_utils_uri__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/utils/uri */ "./resources/js/components/utils/uri.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _alert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./alert */ "./resources/js/actions/alert.js");
 
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -83813,6 +84116,7 @@ var FAILURES_DATA = "FAILURES_DATA";
 var BRAND_LIST = "BRAND_LIST";
 var CATEGORY_LIST = "CATEGORY_LIST";
 var ASKED_DEVIS = "ASKED_DEVIS";
+
  //defini dans ce fichier et appeller dans App ;plutot que de le construire dans les components
 
 function _DATA_ARTICLES_INITIAL(articles) {
@@ -84021,6 +84325,7 @@ var _CREATE_BRAND = function _CREATE_BRAND(data) {
                 res = _context4.sent;
                 console.log('data-sortant', res); // call action redux to show message notif
 
+                dispatch(Object(_alert__WEBPACK_IMPORTED_MODULE_3__["_setAlert"])('Nouveau fournisseur ajoutée', 'success'));
                 /*   
                  dispatch({
                    type: CATEGORY_SELECTED,
@@ -84030,23 +84335,23 @@ var _CREATE_BRAND = function _CREATE_BRAND(data) {
 
                 return _context4.abrupt("return", 'success');
 
-              case 10:
-                _context4.prev = 10;
+              case 11:
+                _context4.prev = 11;
                 _context4.t0 = _context4["catch"](1);
-                //error.response.data.errors;
                 console.log('error_save_brand', _context4.t0.response.data.errors);
                 errors = _context4.t0.response.data.errors;
                 Object.keys(errors).map(function (error, index) {
-                  return console.log(errors[error][0]);
+                  return console.log(errors[error][0]) // call action redux to show errors validation
+                  (dispatch(Object(_alert__WEBPACK_IMPORTED_MODULE_3__["_setAlert"])('Error:' + errors[error][0], 'error')));
                 });
                 return _context4.abrupt("return", errors);
 
-              case 16:
+              case 17:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, null, [[1, 10]]);
+        }, _callee4, null, [[1, 11]]);
       }));
 
       return function (_x4) {
@@ -84103,51 +84408,89 @@ function () {
  * Simple request to contacPost action controller
  */
 
-var _SENDMAIL =
-/*#__PURE__*/
-function () {
-  var _ref6 = _asyncToGenerator(
-  /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(data) {
-    var response, errors;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            _context6.prev = 0;
-            _context6.next = 3;
-            return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("".concat(_components_utils_uri__WEBPACK_IMPORTED_MODULE_1__["API_END_POINT"], "contact"), data);
+var _SENDMAIL = function _SENDMAIL(data) {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref6 = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(dispatch) {
+        var response, errors;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.prev = 0;
+                _context6.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("".concat(_components_utils_uri__WEBPACK_IMPORTED_MODULE_1__["API_END_POINT"], "contact"), data);
 
-          case 3:
-            response = _context6.sent;
-            console.log('Rdata', response.status);
-            return _context6.abrupt("return", response);
+              case 3:
+                response = _context6.sent;
+                console.log('Rdata', response.status);
 
-          case 8:
-            _context6.prev = 8;
-            _context6.t0 = _context6["catch"](0);
-            //error.response.data.errors;
-            console.log('error_asked_edvis', _context6.t0.response.data);
-            errors = _context6.t0.response;
-            return _context6.abrupt("return", errors);
+                if (response.status === 200) {
+                  dispatch(Object(_alert__WEBPACK_IMPORTED_MODULE_3__["_setAlert"])('Message envoyé. Merci pour votre confiance', 'success'));
+                }
 
-          case 13:
-          case "end":
-            return _context6.stop();
-        }
-      }
-    }, _callee6, null, [[0, 8]]);
-  }));
+                return _context6.abrupt("return", response);
 
-  return function _SENDMAIL(_x6) {
-    return _ref6.apply(this, arguments);
-  };
-}();
+              case 9:
+                _context6.prev = 9;
+                _context6.t0 = _context6["catch"](0);
+                console.log('error_send_mai_contact_form', _context6.t0.response);
+                errors = _context6.t0.response.data.errors;
+
+                if (!(_context6.t0.response.status === 422)) {
+                  _context6.next = 18;
+                  break;
+                }
+
+                errors = _objectSpread({}, errors, {
+                  status: 422
+                });
+                return _context6.abrupt("return", _context6.t0.response);
+
+              case 18:
+                Object.keys(errors).map(function (error, index) {
+                  return console.log(errors[error])(dispatch(Object(_alert__WEBPACK_IMPORTED_MODULE_3__["_setAlert"])('Error:' + errors[error], 'error')));
+                });
+
+              case 19:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, null, [[0, 9]]);
+      }));
+
+      return function (_x6) {
+        return _ref6.apply(this, arguments);
+      };
+    }()
+  );
+};
 /**
  * Le paramètre type d'une action est obligatoire alors que 
  * le paramètre value est optionnel. 
  * Selon l'action, la value n'est parfois pas nécessaire.
  */
+
+/***/ }),
+
+/***/ "./resources/js/actions/types.js":
+/*!***************************************!*\
+  !*** ./resources/js/actions/types.js ***!
+  \***************************************/
+/*! exports provided: SET_ALERT, REMOVE_ALERT */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_ALERT", function() { return SET_ALERT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_ALERT", function() { return REMOVE_ALERT; });
+//ALERT
+var SET_ALERT = "SET_ALERT";
+var REMOVE_ALERT = "REMOVE_ALERT";
 
 /***/ }),
 
@@ -84279,13 +84622,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var iniState = {
+var dataInitial = {
   edit: false,
   checked: false,
   selectedFile: null,
   data: {
-    name: '',
-    comment: ''
+    name: "",
+    comment: ""
   }
 };
 
@@ -84398,7 +84741,7 @@ function (_Component) {
 
       this.props._CREATE_BRAND(fd).then(function (res) {
         if (res === 'success') {
-          _this2.setState(iniState);
+          _this2.setState(dataInitial);
         }
       });
     }
@@ -84990,6 +85333,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _brand_form__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./brand-form */ "./resources/js/components/adminui/brand-form.js");
 /* harmony import */ var _category_list__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./category-list */ "./resources/js/components/adminui/category-list.js");
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../actions */ "./resources/js/actions/index.js");
+/* harmony import */ var _utils_alertMessage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../utils/alertMessage */ "./resources/js/components/utils/alertMessage.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -85022,6 +85366,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var Index =
 /*#__PURE__*/
 function (_Component) {
@@ -85035,13 +85380,17 @@ function (_Component) {
 
   _createClass(Index, [{
     key: "componentDidMount",
+
+    /**
+     * After mounting
+     */
     value: function componentDidMount() {
       _store_configureStore__WEBPACK_IMPORTED_MODULE_5__["default"].dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_11__["_GETALLDATALIST"])());
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_alertMessage__WEBPACK_IMPORTED_MODULE_12__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-lg-9 col-md-12 col-sm-12 mb-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_data_table__WEBPACK_IMPORTED_MODULE_6__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-lg-3 col-md-12 col-sm-12 mb-4"
@@ -85085,8 +85434,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _reCaptcha__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./reCaptcha */ "./resources/js/components/forms/reCaptcha.js");
-/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../actions */ "./resources/js/actions/index.js");
-/* harmony import */ var _utils_notification__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/notification */ "./resources/js/components/utils/notification.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store_configureStore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../store/configureStore */ "./resources/js/store/configureStore.js");
+/* harmony import */ var _actions_index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../actions/index */ "./resources/js/actions/index.js");
+/* harmony import */ var _utils_alertMessage__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/alertMessage */ "./resources/js/components/utils/alertMessage.js");
+/* harmony import */ var _actions_alert__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../actions/alert */ "./resources/js/actions/alert.js");
 
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -85117,10 +85469,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+ //Redux
+
+
  //Action
 
  //Utils
 
+
+
+/**
+ * Init state
+ * call when we want 
+ * clear form contact
+ */
 
 var dataInitial = {
   name: '',
@@ -85158,8 +85520,10 @@ function (_Component) {
       isVerified: false,
       errors: []
       /**
-       * Send all datas using _ASKED_DEVIS() function 
-       * in actions file
+       * Send all datas using _SENDMAIL()  
+       * from store redux
+       * and show errors laravel 422
+       * in form
        */
 
     });
@@ -85176,49 +85540,34 @@ function (_Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 //Don't reload me page please
-                e.preventDefault(); // if (this.state.isloading) {
-                //Check if capctha is true and load
-                //   if (this.state.isVerified) {
+                e.preventDefault();
 
-                formData = _this.state.formData;
-                console.log("state", formData);
+                if (_this.state.isloading) {
+                  //Check if capctha is true and load
+                  if (_this.state.isVerified) {
+                    formData = _this.state.formData;
+                    console.log("state", formData);
+                    _store_configureStore__WEBPACK_IMPORTED_MODULE_5__["default"].dispatch(Object(_actions_index__WEBPACK_IMPORTED_MODULE_6__["_SENDMAIL"])(formData)).then(function (response) {
+                      console.log('gestion_derreur', response);
 
-                Object(_actions__WEBPACK_IMPORTED_MODULE_4__["_SENDMAIL"])(formData).then(function (response) {
-                  console.log('to_front', response.status);
-
-                  if (response.status === 200) {
-                    Object(_utils_notification__WEBPACK_IMPORTED_MODULE_5__["ShowNotification"])("success", "Message envoyé.Merci pour votre confiance ");
-
-                    _this.setState({
-                      formData: dataInitial
+                      if (response.status === 422) {
+                        _this.setState({
+                          errors: response.data.errors
+                        });
+                      } else {
+                        _this.setState({
+                          formData: dataInitial
+                        });
+                      }
+                    })["catch"](function (error) {
+                      console.log('err_front', error);
                     });
+                  } else {
+                    _store_configureStore__WEBPACK_IMPORTED_MODULE_5__["default"].dispatch(Object(_actions_alert__WEBPACK_IMPORTED_MODULE_8__["_setAlert"])("Please verify that you are a human!", "warning"));
                   }
+                }
 
-                  if (response.status === 422) {
-                    console.log('gestion_derreur', response.data.errors);
-
-                    _this.setState({
-                      errors: response.data.errors
-                    });
-                  }
-
-                  if (response.status === 500) {
-                    Object(_utils_notification__WEBPACK_IMPORTED_MODULE_5__["ShowNotification"])("warning", "Contactez l'administrateur ");
-
-                    _this.setState({
-                      formData: dataInitial
-                    });
-                  }
-                })["catch"](function (error) {
-                  console.log('err_front', error);
-                });
-                /*    } else {
-                       ShowNotification("error", "Please verify that you are a human!  ");
-                   }
-                } */
-
-
-              case 4:
+              case 2:
               case "end":
                 return _context.stop();
             }
@@ -85351,11 +85700,18 @@ function (_Component) {
         placeholder: "Votre message"
       }), this.renderErrorFor('message'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "col-md-12 text-right"
-      }, "\xA0\xA0 \xA0", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_reCaptcha__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        handleOnloadCallback: this.handleOnloadCallback,
+        handleVerifyCallback: this.handleVerifyCallback
+      }), "\xA0\xA0 \xA0", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         type: "submit",
         value: "submit",
-        className: "primary-btn col-md-6 pull-rigth"
-      }, "ENVOYER"))));
+        className: "primary-btn col-md-6 pull-rigth",
+        style: {
+          marginTop: -112,
+          width: 394
+        }
+      }, "ENVOYER"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_alertMessage__WEBPACK_IMPORTED_MODULE_7__["default"], null));
     }
   }]);
 
@@ -85363,7 +85719,10 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
 if (document.getElementById("contact_form")) {
-  react_dom__WEBPACK_IMPORTED_MODULE_2___default.a.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ContactForm, null), document.getElementById("contact_form"));
+  console.log("STORE:", _store_configureStore__WEBPACK_IMPORTED_MODULE_5__["default"].dispatch(Object(_actions_index__WEBPACK_IMPORTED_MODULE_6__["_SENDMAIL"])()));
+  react_dom__WEBPACK_IMPORTED_MODULE_2___default.a.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_4__["Provider"], {
+    store: _store_configureStore__WEBPACK_IMPORTED_MODULE_5__["default"]
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ContactForm, null)), document.getElementById("contact_form"));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (ContactForm);
@@ -86706,6 +87065,37 @@ if (document.getElementById("search_input_box")) {
 
 /***/ }),
 
+/***/ "./resources/js/components/utils/alertMessage.js":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/utils/alertMessage.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _notification__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./notification */ "./resources/js/components/utils/notification.js");
+
+
+
+var AlertMessage = function AlertMessage(_ref) {
+  var alerts = _ref.alerts;
+  return alerts !== null && alerts.length > 0 && alerts.map(function (alert) {
+    return Object(_notification__WEBPACK_IMPORTED_MODULE_1__["ShowNotification"])(alert.alertType, alert.msg);
+  });
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    alerts: state.alertMessage
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(mapStateToProps, null)(AlertMessage));
+
+/***/ }),
+
 /***/ "./resources/js/components/utils/btnColor.js":
 /*!***************************************************!*\
   !*** ./resources/js/components/utils/btnColor.js ***!
@@ -86839,6 +87229,70 @@ __webpack_require__.r(__webpack_exports__);
 var middleware = [redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"]];
 var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_rootReducer__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["compose"])(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"].apply(void 0, middleware), window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()));
 /* harmony default export */ __webpack_exports__["default"] = (store);
+
+/***/ }),
+
+/***/ "./resources/js/store/reducers/alert_reducer.js":
+/*!******************************************************!*\
+  !*** ./resources/js/store/reducers/alert_reducer.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/js/actions/types.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+
+var initialState = []; //init
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+  var nextState;
+  var type = action.type,
+      payload = action.payload;
+
+  switch (type) {
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["SET_ALERT"]:
+      return nextState = [].concat(_toConsumableArray(state), [payload]);
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["REMOVE_ALERT"]:
+      return nextState = state.filter(function (alert) {
+        return alert.id !== payload;
+      });
+
+    default:
+      return nextState || state;
+  }
+});
+/**
+ * 1-on construit une fonction 
+ * qui retourne un objet
+ * qui va être un bout du state de l'application
+ * 
+ */
+
+/**
+ * 2-Un reducer est donc une fonction qui
+ *  modifie le state de votre application 
+ *  en fonction d'une action.
+ */
+
+/**
+ * 3-le state doit toujours rester immuable.
+ * Si vous souhaitez modifier un objet immuable, 
+ * il faut créer une copie de cet objet (donc créer un nouvel objet) 
+ * et y appliquer vos modifications.
+ * 
+ */
 
 /***/ }),
 
@@ -87021,12 +87475,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 /* harmony import */ var _dataList_reducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dataList_reducer */ "./resources/js/store/reducers/dataList_reducer.js");
 /* harmony import */ var _listes_reducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./listes_reducer */ "./resources/js/store/reducers/listes_reducer.js");
+/* harmony import */ var _alert_reducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./alert_reducer */ "./resources/js/store/reducers/alert_reducer.js");
+
 
 
 
 var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   filterDataArticleList: _dataList_reducer__WEBPACK_IMPORTED_MODULE_1__["default"],
-  listeBrandANDCategory: _listes_reducer__WEBPACK_IMPORTED_MODULE_2__["default"]
+  listeBrandANDCategory: _listes_reducer__WEBPACK_IMPORTED_MODULE_2__["default"],
+  alertMessage: _alert_reducer__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
 /* harmony default export */ __webpack_exports__["default"] = (rootReducer);
 

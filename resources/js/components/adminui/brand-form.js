@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {_CREATE_BRAND} from "../../actions/index";
 
-const iniState = {
+const dataInitial = {
     edit: false,
     checked: false,
     selectedFile: null,
-    data: { name: '',comment: ''} 
-}
+    data: { name: "", comment: "" }
+};
 
 
 
@@ -39,6 +39,7 @@ class BrandForm extends Component {
      * we set the state
      */
     componentWillReceiveProps(nextProps) {
+
         if (nextProps.currentBrand !== this.props.currentBrand) {
 
             let { name, comment } = nextProps.currentBrand
@@ -73,11 +74,6 @@ class BrandForm extends Component {
         })
     }
 
- 
-
-
-
-
 
     /**
      * SetState just for file input 
@@ -104,9 +100,7 @@ class BrandForm extends Component {
         e.preventDefault();
 
         if (!this.state.edit) {
-
             this.onCreateBrand()
-           
         } else {
             console.log("edit THIS br action");
         }
@@ -121,7 +115,6 @@ class BrandForm extends Component {
      */
     handleDelete = e => {
         e.preventDefault();
-
         if (this.state.checked) {
             console.log('Deleted action ')
         } else {
@@ -139,6 +132,7 @@ class BrandForm extends Component {
      */
     onCreateBrand(){
         let { name, comment, selectedFile } = this.state.data;
+
         const fd = new FormData();
         selectedFile
             ? fd.append('file', selectedFile, selectedFile.name)
@@ -148,7 +142,7 @@ class BrandForm extends Component {
 
         //action redux: send data and clear form if successfully
         this.props._CREATE_BRAND(fd).then((res) => {
-            if (res === 'success') {  this.setState(iniState) }
+            if (res === 'success') { this.setState(dataInitial) }
 
         });
     }

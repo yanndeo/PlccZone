@@ -21,7 +21,7 @@ const BrandList = ({ brands, _SELECTED_BRAND}) => {
      * render list 
      */
     const renderList = brands.slice(0,11).map(brand => (
-        <li className="list-group-item d-flex px-3" key={brand.id} onClick={(e) => handleClick(e, brand.id)}>
+        <li className="list-group-item d-flex px-3" key={brand.id} onClick={(e) => handleClick(e, brand.id)} >
             <span className="text-semibold text-fiord-blue"> <a href="#" style={{ color: '#3d5170' }}>  {brand.name} </a> </span>
             <span className="ml-auto text-right text-semibold text-reagent-gray">{brand.count_pb}</span>
         </li>

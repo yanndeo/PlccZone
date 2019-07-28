@@ -11,6 +11,7 @@ export const ASKED_DEVIS = "ASKED_DEVIS";
 
 
 import axios from 'axios'
+import { _setAlert } from "./alert";
 
 
 
@@ -153,7 +154,9 @@ export const _CREATE_BRAND = data => async dispatch=> {
 
         const res = await axios.post(`${API_END_POINT}fabricants`, data)
         console.log('data-sortant',res );
-           // call action redux to show message notif
+
+        // call action redux to show message notif
+        dispatch(_setAlert('Nouveau fournisseur ajoutée', 'success') )
 
          /*   
           dispatch({
@@ -164,19 +167,20 @@ export const _CREATE_BRAND = data => async dispatch=> {
 
         return 'success'
         document.getElementById('form-brand').reset(0); // clear input file
+
     } catch(error) {
-        //error.response.data.errors;
         console.log('error_save_brand', error.response.data.errors)
         let errors = error.response.data.errors;
 
         
             Object.keys(errors).map((error, index) => (
                 console.log(errors[error][0] )
+                    // call action redux to show errors validation
+                     (dispatch(_setAlert('Error:'+ errors[error][0], 'error')))
             ))
         
         return errors;
 
-        // call action redux to show errors validation
     }
 
 
@@ -218,21 +222,41 @@ export const _ASKED_DEVIS = async(data) => {
 /**
  * Simple request to contacPost action controller
  */
-export const _SENDMAIL= async(data)=>{
+export const _SENDMAIL = data => async dispatch => {
 
     try {
         const response = await axios.post(`${API_END_POINT}contact`, data);
 
         console.log('Rdata', response.status)
 
+        if (response.status === 200) {
+            dispatch(_setAlert('Message envoyé. Merci pour votre confiance', 'success'))
+        }
+
         return response;
 
     } catch (error) {
-        //error.response.data.errors;
-        console.log('error_asked_edvis', error.response.data)
-        let errors = error.response;
+        console.log('error_send_mai_contact_form', error.response)
+        let errors = error.response.data.errors;
 
-        return errors;
+        if(error.response.status === 422){
+            
+             errors=  {
+                 ...errors,
+                 status :422
+             }
+
+            return error.response;
+        }else{
+
+            Object.keys(errors).map((error, index) => (
+                console.log(errors[error])
+                    (dispatch(_setAlert('Error:' + errors[error], 'error')))
+            ))
+        }
+
+        
+
     }
 }
 

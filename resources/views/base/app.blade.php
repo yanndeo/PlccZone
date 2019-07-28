@@ -13,7 +13,6 @@
 	<!-- Site Title -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-
 @section('meta')
 		<meta name="description" content="">
 		<meta name="keywords" content="">
