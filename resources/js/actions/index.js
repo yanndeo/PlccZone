@@ -144,7 +144,7 @@ export const _SELECTED_CATEGORY = category=> async dispatch=> {
  * to create brand (and image)
  */
 
-export const _CREATE_BRAND = data => async dispatch=> {
+export const _CREATE_BRAND = (data) => async dispatch=> {
 
     console.log('DATA-entrant',data)
 

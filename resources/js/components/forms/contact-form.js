@@ -64,9 +64,7 @@ class ContactForm extends Component {
                 console.log("state", formData);
 
                            STORE.dispatch(_SENDMAIL(formData))
-                                .then(response => {   
-                                    console.log('gestion_derreur', response)
-      
+                                .then(response => {         
                                     if (response.status === 422) {
                                         this.setState({ errors: response.data.errors })
                                     }else{
@@ -78,9 +76,8 @@ class ContactForm extends Component {
 
                                 })
 
-
-
              } else {
+                 // if we not checked recaptcha.
                 STORE.dispatch(_setAlert("Please verify that you are a human!","warning"))
             }
         } 

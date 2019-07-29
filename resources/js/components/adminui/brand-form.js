@@ -19,7 +19,6 @@ class BrandForm extends Component {
         this.state = {
             edit: false,
             checked: false,
-           // selectedFile: null,
             data: {
                 name: '',
                 comment: '',
@@ -40,8 +39,10 @@ class BrandForm extends Component {
      */
     componentWillReceiveProps(nextProps) {
 
-        if (nextProps.currentBrand !== this.props.currentBrand) {
+        console.log('props-currentBrand', this.props.currentBrand)
 
+        if (nextProps.currentBrand !== this.props.currentBrand) {
+            
             let { name, comment } = nextProps.currentBrand
 
             this.setState({
@@ -154,6 +155,7 @@ class BrandForm extends Component {
 
         let { name, comment } = this.state.data;
 
+
         let classNameBtn = this.state.edit ? 'danger' : 'default'
 
 
@@ -219,7 +221,7 @@ class BrandForm extends Component {
  * when we clicked on brand list
  */
 const mapStateToProps = state => ({
-    currentBrand: state.filterDataArticleList.currentBrand ? state.filterDataArticleList.currentBrand : null
+   // currentBrand: state.filterDataArticleList.currentBrand ? state.filterDataArticleList.currentBrand : null
 });
 
 

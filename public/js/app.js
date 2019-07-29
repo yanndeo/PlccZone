@@ -84683,7 +84683,6 @@ function (_Component) {
     _this.state = {
       edit: false,
       checked: false,
-      // selectedFile: null,
       data: {
         name: '',
         comment: '',
@@ -84701,6 +84700,8 @@ function (_Component) {
   _createClass(BrandForm, [{
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
+      console.log('props-currentBrand', this.props.currentBrand);
+
       if (nextProps.currentBrand !== this.props.currentBrand) {
         var _nextProps$currentBra = nextProps.currentBrand,
             name = _nextProps$currentBra.name,
@@ -84814,8 +84815,7 @@ function (_Component) {
 
 
 var mapStateToProps = function mapStateToProps(state) {
-  return {
-    currentBrand: state.filterDataArticleList.currentBrand ? state.filterDataArticleList.currentBrand : null
+  return {// currentBrand: state.filterDataArticleList.currentBrand ? state.filterDataArticleList.currentBrand : null
   };
 };
 
@@ -84847,12 +84847,9 @@ __webpack_require__.r(__webpack_exports__);
 
 var BrandList = function BrandList(_ref) {
   var brands = _ref.brands,
-      _SELECTED_BRAND = _ref._SELECTED_BRAND;
+      _SELECTED_BRAND = _ref._SELECTED_BRAND,
+      handleCallbackSelectBrand = _ref.handleCallbackSelectBrand;
 
-  /**
-   * Send action 
-   * when we clicked
-   */
   var handleClick = function handleClick(e, ID) {
     e.preventDefault();
 
@@ -84868,7 +84865,7 @@ var BrandList = function BrandList(_ref) {
       className: "list-group-item d-flex px-3",
       key: brand.id,
       onClick: function onClick(e) {
-        return handleClick(e, brand.id);
+        return handleCallbackSelectBrand(e, brand);
       }
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
       className: "text-semibold text-fiord-blue"
@@ -85332,7 +85329,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _category_form__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./category-form */ "./resources/js/components/adminui/category-form.js");
 /* harmony import */ var _brand_form__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./brand-form */ "./resources/js/components/adminui/brand-form.js");
 /* harmony import */ var _category_list__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./category-list */ "./resources/js/components/adminui/category-list.js");
-/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../actions */ "./resources/js/actions/index.js");
+/* harmony import */ var _actions_index__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../actions/index */ "./resources/js/actions/index.js");
 /* harmony import */ var _utils_alertMessage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../utils/alertMessage */ "./resources/js/components/utils/alertMessage.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -85344,24 +85341,30 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
  // Import des Libs
 
 
+ //Redux Conf
+
+
+ //Components
 
 
 
 
 
-
+ //Actions redux
 
 
 
@@ -85373,20 +85376,51 @@ function (_Component) {
   _inherits(Index, _Component);
 
   function Index() {
+    var _getPrototypeOf2;
+
+    var _this;
+
     _classCallCheck(this, Index);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Index).apply(this, arguments));
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Index)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      currentBrand: null
+      /**
+       * After mounting
+       */
+
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleSelectBrand", function (e, brand) {
+      e.preventDefault();
+      console.log('bran-selected', brand);
+
+      _this.setState({
+        currentBrand: brand
+      }); //STORE.dispatch(_SELECTED_BRAND(ID))
+
+
+      return brand;
+    });
+
+    return _this;
   }
 
   _createClass(Index, [{
     key: "componentDidMount",
-
-    /**
-     * After mounting
-     */
     value: function componentDidMount() {
-      _store_configureStore__WEBPACK_IMPORTED_MODULE_5__["default"].dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_11__["_GETALLDATALIST"])());
+      _store_configureStore__WEBPACK_IMPORTED_MODULE_5__["default"].dispatch(Object(_actions_index__WEBPACK_IMPORTED_MODULE_11__["_GETALLDATALIST"])());
     }
+    /**
+     * When we click 
+     * on a brand of list
+     */
+
   }, {
     key: "render",
     value: function render() {
@@ -85394,11 +85428,15 @@ function (_Component) {
         className: "col-lg-9 col-md-12 col-sm-12 mb-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_data_table__WEBPACK_IMPORTED_MODULE_6__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-lg-3 col-md-12 col-sm-12 mb-4"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_brand_list__WEBPACK_IMPORTED_MODULE_7__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_brand_list__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        handleCallbackSelectBrand: this.handleSelectBrand
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-lg-4 col-md-6 col-sm-12 mb-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_category_form__WEBPACK_IMPORTED_MODULE_8__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-lg-5 col-md-6 col-sm-12 mb-4"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_brand_form__WEBPACK_IMPORTED_MODULE_9__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_brand_form__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        currentBrand: this.state.currentBrand
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-lg-3 col-md-12 col-sm-12 mb-4 "
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_category_list__WEBPACK_IMPORTED_MODULE_10__["default"], null)));
     }
@@ -85548,8 +85586,6 @@ function (_Component) {
                     formData = _this.state.formData;
                     console.log("state", formData);
                     _store_configureStore__WEBPACK_IMPORTED_MODULE_5__["default"].dispatch(Object(_actions_index__WEBPACK_IMPORTED_MODULE_6__["_SENDMAIL"])(formData)).then(function (response) {
-                      console.log('gestion_derreur', response);
-
                       if (response.status === 422) {
                         _this.setState({
                           errors: response.data.errors
@@ -85563,6 +85599,7 @@ function (_Component) {
                       console.log('err_front', error);
                     });
                   } else {
+                    // if we not checked recaptcha.
                     _store_configureStore__WEBPACK_IMPORTED_MODULE_5__["default"].dispatch(Object(_actions_alert__WEBPACK_IMPORTED_MODULE_8__["_setAlert"])("Please verify that you are a human!", "warning"));
                   }
                 }
